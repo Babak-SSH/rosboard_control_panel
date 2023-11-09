@@ -24,31 +24,53 @@
         <title>ROSboard</title>
     </head>
     <body>
-        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-          <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
-              <!-- Title -->
-              <span class="mdl-layout-title">ROSboard</span>
-              <!-- Add spacer, to align navigation to the right -->
-              <div class="mdl-layout-spacer"></div>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-tabs">
+            <header class="mdl-layout__header">
+                <!-- Tabs -->
+                <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                    <a href="#fixed-tab-1" class="mdl-layout__tab is-active">Status</a>
+                    <a href="#fixed-tab-2" class="mdl-layout__tab">Controller</a>
+                    <a href="#fixed-tab-3" class="mdl-layout__tab">Commands</a>
+                    <a href="#fixed-tab-4" class="mdl-layout__tab">FAQ</a>
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">Title</span>
+                <nav id="topics-nav" class="mdl-navigation">
+                    <div id="topics-nav-system-title" class="topics-nav-title">System</div>
+                    <div id="topics-nav-system"></div>
+                    <div id="topics-nav-ros-title" class="topics-nav-title">ROS topics</div>
+                    <div id="topics-nav-ros"></div>
+                    <div style="opacity:0.3;" id="topics-nav-unsupported"></div>
+                </nav>
             </div>
-          </header>
-          <div class="mdl-layout__drawer">
-            <nav id="topics-nav" class="mdl-navigation">
-                <div id="topics-nav-system-title" class="topics-nav-title">System</div>
-                <div id="topics-nav-system"></div>
-                <div id="topics-nav-ros-title" class="topics-nav-title">ROS topics</div>
-                <div id="topics-nav-ros"></div>
-                <div style="opacity:0.3;" id="topics-nav-unsupported"></div>
-            </nav>
-          </div>
-          <main class="mdl-layout__content">
-            <div class="page-content">
-              <div class="grid">
-              </div>
-            </div>
-          </main>
-        </div>
+            <main class="mdl-layout__content">
+                <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
+                    <div class="page-content">
+                        <div class="status-grid">
+                        </div>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="fixed-tab-2">
+                    <div class="page-content">
+                        <div class="controller-grid">
+                        </div>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="fixed-tab-3">
+                    <div class="page-content">
+                        <div class="command-grid">
+                        </div>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="fixed-tab-4">
+                    <div class="page-content">
+                        <div class="faq-grid">
+                        </div>
+                    </div>
+                  </section>
+              </main> 
+          </div> 
         
   <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
     <div class="mdl-snackbar__text"></div>
