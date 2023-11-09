@@ -41,7 +41,7 @@ if(window.localStorage && window.localStorage.subscriptions) {
 
 let $grid = null;
 $(() => {
-  $grid = $('.grid').masonry({
+  $grid = $('.status-grid').masonry({
     itemSelector: '.card',
     gutter: 10,
     percentPosition: true,
@@ -71,7 +71,7 @@ function updateStoredSubscriptions() {
 function newCard() {
   // creates a new card, adds it to the grid, and returns it.
   let card = $("<div></div>").addClass('card')
-    .appendTo($('.grid'));
+    .appendTo($('.status-grid'));
   return card;
 }
 
