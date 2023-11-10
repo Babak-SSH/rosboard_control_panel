@@ -112,8 +112,9 @@ input, textarea, *[contenteditable=true] {
 }
 
 .card {
+  resize: both;
+  overflow: auto;
   border-radius:5pt;
-  overflow:hidden;
   margin-left:20pt;
   margin-top:20pt;
   background:#303030;
@@ -194,14 +195,16 @@ input, textarea, *[contenteditable=true] {
 @media screen and (min-width: 1200px) {
   .card {
     display:inline-block;
-    width:calc(33% - 40pt);
+    /* width:calc(33% - 40pt); */
+    width:calc(66% - 40pt);
   }
 }
 
 @media screen and (min-width: 1800px) {
   .card {
     display:inline-block;
-    width:calc(25% - 40pt);
+    /* width:calc(25% - 40pt); */
+    width:calc(50% - 40pt);
   }
 }
 
