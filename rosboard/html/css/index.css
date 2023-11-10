@@ -312,6 +312,17 @@ input, textarea, *[contenteditable=true] {
 .mdl-layout__drawer {
   width: 300px;
   left: -150px;
+  z-index: 11;
+}
+
+.mdl-layout__drawer-button {
+    top: calc(100% - 90pt);
+    color: indigo !important;
+    background-color: transparent !important;
+}
+
+.mdl-layout__header-row {
+    height: calc(100% - 42pt);
 }
 
 .mdl-layout__drawer.is-visible {
@@ -375,6 +386,43 @@ input, textarea, *[contenteditable=true] {
   -webkit-animation: load6 1.7s infinite ease, round 1.7s infinite ease;
   animation: load6 1.7s infinite ease, round 1.7s infinite ease;
 }
+
+
+body, ::backdrop {
+    background: #fff;
+}
+#fullscreen-button {
+    position: absolute;
+    bottom: 15px;
+    /* left:  10px; */
+    left: calc(0% + 10px);
+    background: rgba(0,0,0,0.05);
+    border:  0;
+    width:  40px;
+    height:  40px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    transition:  transform .3s;
+    cursor:  pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+    top: calc(100% - 50pt);
+}
+#fullscreen-button:hover {
+    transform: scale(1.125);
+}
+#fullscreen-button svg:nth-child(2) { 
+    display: none;
+}
+[fullscreen] #fullscreen-button svg:nth-child(1) {
+    display: none;
+}
+[fullscreen] #fullscreen-button svg:nth-child(2) {
+    display: inline-block;
+}
+
 @-webkit-keyframes load6 {
   0% {
     box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
