@@ -17,6 +17,8 @@ else:
     print("ROS not detected. Please source your ROS environment\n(e.g. 'source /opt/ros/DISTRO/setup.bash')")
     exit(1)
 
+from geometry_msgs.msg import Twist
+from sensor_msgs.msg import Joy
 from rosgraph_msgs.msg import Log
 
 from rosboard.serialization import ros2dict
@@ -58,6 +60,8 @@ class ROSBoardNode(object):
             # ros2 docs don't explain why but we need this magic.
             self.sub_rosout = rospy.Subscriber("/rosout", Log, lambda x:x)
 
+        self.joy_pub = rospy.Publisher('/joy', Joy, queue_size=100)
+
         tornado_settings = {
             'debug': True,
             'static_path': os.path.join(os.path.dirname(os.path.realpath(__file__)), 'html')
@@ -91,6 +95,9 @@ class ROSBoardNode(object):
 
         # loop to keep track of latencies and clock differences for each socket
         threading.Thread(target = self.pingpong_loop, daemon = True).start()
+
+        # loop to send client joy message to ros topic
+        threading.Thread(target = self.joy_loop, daemon = True).start()
 
         self.lock = threading.Lock()
 
@@ -147,6 +154,24 @@ class ROSBoardNode(object):
             else:
                 rospy.logwarn("QoS profiles are only used in ROS2")
                 return None
+
+    def joy_loop(self):
+        """
+        Sending joy message from client
+        """
+
+        joy = Joy()
+        while True:
+            time.sleep(0.1)
+            if not isinstance(ROSBoardSocketHandler.joy_msg, dict):
+                continue
+            if 'x' in ROSBoardSocketHandler.joy_msg and 'y' in ROSBoardSocketHandler.joy_msg:
+                joy.buttons = [0,0,0,0,0,0,0,0,0,0,0]
+                joy.axes = [0,0,0,0,0,0,0,0]
+                joy.axes[3] = -float(ROSBoardSocketHandler.joy_msg['x'])
+                joy.axes[4] = -float(ROSBoardSocketHandler.joy_msg['y'])
+                joy.axes[0] = -float(ROSBoardSocketHandler.joy_msg['r'])
+            self.joy_pub.publish(joy)
 
     def pingpong_loop(self):
         """
