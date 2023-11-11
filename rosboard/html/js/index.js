@@ -14,13 +14,15 @@ importJsOnce("js/viewers/PolygonViewer.js");
 importJsOnce("js/viewers/DiagnosticViewer.js");
 importJsOnce("js/viewers/TimeSeriesPlotViewer.js");
 importJsOnce("js/viewers/PointCloud2Viewer.js");
+// importJsOnce("js/viewers/JoystickController.js");
+importJsOnce("js/viewers/ControllerViewer.js");
 
 // GenericViewer must be last
 importJsOnce("js/viewers/GenericViewer.js");
 
 importJsOnce("js/transports/WebSocketV1Transport.js");
 
-  if (document.fullscreenEnabled) {
+if (document.fullscreenEnabled) {
     const fullscreen_button = document.createElement("button");
     fullscreen_button.setAttribute('id','fullscreen-button');
     fullscreen_button.addEventListener("click", toggle_fullscreen);
@@ -60,6 +62,12 @@ function toggle_fullscreen() {
     }
 } 
 
+let controller_tab = document.getElementById("tab2");
+controller_tab.addEventListener("click", get_controller);
+function get_controller() {
+    initSubscribe({topicName: "/d435/color/image_raw", topicType: "sensor_msgs/Image"});
+}
+
 var snackbarContainer = document.querySelector('#demo-toast-example');
 
 let subscriptions = {};
@@ -89,6 +97,20 @@ $(() => {
   $grid.masonry("layout");
 });
 
+let $controller_grid = null;
+$(() => {
+    $controller_grid = $('.controller-grid').masonry({
+        itemSelector: '.controller-card',
+        gutter: 10,
+        percentPosition: true,
+    });
+});
+
+setInterval(() => {
+    $grid.masonry("reloadItems");
+    $grid.masonry();
+  }, 500);
+
 setInterval(() => {
   if(currentTransport && !currentTransport.isConnected()) {
     console.log("attempting to reconnect ...");
@@ -113,6 +135,13 @@ function newCard() {
   let card = $("<div></div>").addClass('card')
     .appendTo($('.status-grid'));
   return card;
+}
+
+function newController() {
+    // creates controller, adds it to the grid, and returns it.
+    let card= $("<div></div>").addClass('controller-card')
+        .appendTo($('.controller-grid'));
+    return card;
 }
 
 let onOpen = function() {
@@ -238,16 +267,26 @@ function initSubscribe({topicName, topicType}) {
   }  
   currentTransport.subscribe({topicName: topicName});
   if(!subscriptions[topicName].viewer) {
-    let card = newCard();
-    let viewer = Viewer.getDefaultViewerForType(topicType);
+    let card;
+    if (topicName == "/d435/color/image_raw"){
+       card = newController(); 
+    } else {
+        card = newCard();
+    }
+
+    let viewer = Viewer.getDefaultViewerForType(topicName, topicType);
     try {
       subscriptions[topicName].viewer = new viewer(card, topicName, topicType);
     } catch(e) {
       console.log(e);
       card.remove();
     }
-    $grid.masonry("appended", card);
-    $grid.masonry("layout");
+    if (topicName == "/d435/color/image_raw"){
+        $controller_grid.masonry("appended", card);
+    } else {
+        $grid.masonry("appended", card);
+        $grid.masonry("layout");
+    }
   }
   updateStoredSubscriptions();
 }
