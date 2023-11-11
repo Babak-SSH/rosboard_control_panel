@@ -228,7 +228,7 @@ Viewer.registerViewer = (viewer) => {
 };
 
 // not to be overwritten by child class!
-Viewer.getDefaultViewerForType = (type) => {
+Viewer.getDefaultViewerForType = (name, type) => {
   // gets the viewer class for a given message type (e.g. "std_msgs/msg/String")
 
   // if type is "package/MessageType", converted it to "package/msgs/MessageType"
@@ -239,10 +239,22 @@ Viewer.getDefaultViewerForType = (type) => {
 
   // go down the list of registered viewers and return the first match
   for(let i in Viewer._viewers) {
+    console.log(Viewer._viewers)
     if(Viewer._viewers[i].supportedTypes.includes(type)) {
+        console.log(type);
+        console.log(name);
+        if (name == "/d435/color/image_raw") {
+            if (Viewer._viewers[i].name == "ControllerViewer") {
+                return Viewer._viewers[i];
+            }
+            else {
+                continue;
+            }
+        }
       return Viewer._viewers[i];
     }
     if(Viewer._viewers[i].supportedTypes.includes("*")) {
+        console.log("whattt");
       return Viewer._viewers[i];
     }
   }
