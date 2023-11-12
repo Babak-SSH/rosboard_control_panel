@@ -108,7 +108,43 @@ input, textarea, *[contenteditable=true] {
 }
 
 .mdl-layout__content {
+    height: 100%;
   background:#202020;
+}
+
+.controller-card {
+  /* resize: both; */
+  overflow: hidden;
+  /* overflow: hidden; */
+  /* border-radius:5pt; */
+  /* margin-left:20pt; */
+  /* margin-top:20pt; */
+  background:#303030;
+  color:#c0c0c0;
+  box-shadow:3pt 3pt 3pt rgba(0,0,0,0.2);
+  width: 100%;
+  /* bottom: 0; */
+  /* top: 10px; */
+  /* height: calc(100%-10pt); */
+  /* height: 1330px; */
+  /* margin-top: 64px; */
+  height: 100%;
+  /* height: max-content; */
+}
+
+.controller-grid {
+    position: static !important;
+    /* height:auto !important; */
+    /* height: 90% !important; */
+    /* height: 1330px !important; */
+    /* width: 100vw !important; */
+    overflow: hidden;
+}
+
+#controller-content {
+    height: 100%;
+    scroll-behavior: unset;
+    overflow: hidden;
 }
 
 .card {
@@ -206,6 +242,18 @@ input, textarea, *[contenteditable=true] {
     /* width:calc(25% - 40pt); */
     width:calc(50% - 40pt);
   }
+
+  /* .controller-card {
+    height: calc(100% -10pt) !important;
+  } */
+
+  /* .controller-grid {
+    height: calc(100% - 10pt) !important;
+  } */
+}
+
+html, body {
+    height: 100%;
 }
 
 .packery-drop-placeholder {
