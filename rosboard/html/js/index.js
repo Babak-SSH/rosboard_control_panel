@@ -66,6 +66,7 @@ let controller_tab = document.getElementById("tab2");
 controller_tab.addEventListener("click", get_controller);
 function get_controller() {
     initSubscribe({topicName: "/d435/color/image_raw", topicType: "sensor_msgs/Image"});
+    document.body.style.overflow='hidden';
 }
 
 var snackbarContainer = document.querySelector('#demo-toast-example');
@@ -101,8 +102,8 @@ let $controller_grid = null;
 $(() => {
     $controller_grid = $('.controller-grid').masonry({
         itemSelector: '.controller-card',
-        gutter: 10,
-        percentPosition: true,
+        // gutter: 10,
+        // percentPosition: true,
     });
 });
 
@@ -140,7 +141,7 @@ function newCard() {
 function newController() {
     // creates controller, adds it to the grid, and returns it.
     let card= $("<div></div>").addClass('controller-card')
-        .appendTo($('.controller-grid'));
+        .appendTo($('#controller-content'));
     return card;
 }
 
@@ -282,7 +283,7 @@ function initSubscribe({topicName, topicType}) {
       card.remove();
     }
     if (topicName == "/d435/color/image_raw"){
-        $controller_grid.masonry("appended", card);
+        // $controller_grid.masonry("appended", card);
     } else {
         $grid.masonry("appended", card);
         $grid.masonry("layout");
