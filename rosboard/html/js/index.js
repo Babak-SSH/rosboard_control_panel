@@ -80,6 +80,30 @@ function clearInput() {
 
 buttonElement.addEventListener('click', clearInput);
 
+const GetSpeech = () => {
+    console.log("clicked microphone");
+    // To enable the SpeechRecognition in Firefox Nightly > 72, go to about:config and switch 
+    // the flags media.webspeech.recognition.enable and media.webspeech.recognition.force_enable to true.
+    const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
+   
+    let recognition = new SpeechRecognition();
+
+        recognition.onstart = () => {
+            console.log("starting listening, speak in microphone");
+        }
+        recognition.onspeechend = () => {
+            console.log("stopped listening");
+            recognition.stop();
+        }
+        recognition.onresult = (result) => {
+            console.log(result.results[0][0].transcript);
+            var intxt = document.getElementById("input-text");
+            intxt.value += result.results[0][0].transcript;
+         }
+     
+         recognition.start();
+}
+
 if (document.fullscreenEnabled) {
     const fullscreen_button = document.createElement("button");
     fullscreen_button.setAttribute('id','fullscreen-button');
