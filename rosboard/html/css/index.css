@@ -529,6 +529,28 @@ input:focus {
     background-color: white;
 }
 
+#command-content button {
+    /* float: ; */
+    display: inline;
+    margin-right: 5%;
+    margin-left: 5%;
+    margin-top: 5%;
+    align-items: center;
+    width: 580px !important;
+    height: 250px !important;
+    background-color: #a05050;
+}
+
+#volume-bar {
+    margin-top: 10%;
+    margin-left: 10%;
+}
+
+#switch-onoff {
+    margin-top: 10%;
+    margin-left: 10%;
+}
+
 @-webkit-keyframes load6 {
   0% {
     box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
