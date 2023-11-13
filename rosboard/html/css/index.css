@@ -523,6 +523,12 @@ input:focus {
     direction: rtl;
 }
 
+#mic-icon {
+    margin-top: 2%;
+    color: black;
+    background-color: white;
+}
+
 @-webkit-keyframes load6 {
   0% {
     box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
