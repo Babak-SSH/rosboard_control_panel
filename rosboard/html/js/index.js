@@ -21,6 +21,64 @@ importJsOnce("js/viewers/ControllerViewer.js");
 importJsOnce("js/viewers/GenericViewer.js");
 
 importJsOnce("js/transports/WebSocketV1Transport.js");
+importJsOnce("js/config.js");
+
+
+// Dont deploy This APi KEY or upload on to github
+const API_KEY = MyApiKey;
+const API_URL = "https://api.openai.com/v1/chat/completions";
+
+const submitButton   = document.querySelector('#submit');
+const outPutElement  = document.querySelector('#result');
+const inputElement   = document.querySelector('input');
+const buttonElement  = document.querySelector('button');
+
+
+function changeInput(value) {
+    const inputElement = document.querySelector('input');
+    inputElement.value = value;
+}
+
+async function getMessage() {
+        console.log('Success!');
+        const options = {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${API_KEY}`,
+                'Content-Type' : 'application/json'
+            }, 
+            body : JSON.stringify({
+                model : "gpt-3.5-turbo",
+                messages: [
+                	{role: "system", content: "you are a helpful asssistant which will answer the questions about the custom quadruped made in IUST (Iran university of science and technology) robotics lab and will respond in persian language."},
+                	
+                	{role: "assistant", content: "this quadruped is based on MIT's mini cheetah, the actuators are same on all four legs and the software is developed based on minicheetah's software. the main processor is a UPboard 2 which will be the brain of the robot and will have realsense d435i as camera on it. robot's name is marvin and is being developed in IUST university."},
+                	{role: "user", content: inputElement.value},],
+                max_tokens: 100
+            })
+        }
+    try {
+        const response = await fetch(API_URL, options);
+        const data = await response.clone().json();
+        console.log(data);
+        outPutElement.textContent = data.choices[0].message.content;
+            if (data.choices[0].message.content && inputElement.value) {
+                const pElement = document.createElement('p');
+                pElement.textContent = inputElement.value;
+                pElement.addEventListener('click', () => changeInput());
+            }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+submitButton.addEventListener('click', getMessage);
+
+function clearInput() {
+    inputElement.value = '';
+}
+
+buttonElement.addEventListener('click', clearInput);
 
 if (document.fullscreenEnabled) {
     const fullscreen_button = document.createElement("button");
