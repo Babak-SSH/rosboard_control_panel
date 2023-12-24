@@ -20,105 +20,67 @@ class Viewer {
 
     this.onClose = () => {};
     let that = this;
-    if (this.topicName != "/d435/color/image_raw") {
-        // div container at the top right for all the buttons
-        card.buttons = $('<div></div>').addClass('card-buttons').text('').appendTo(card);
+    // div container at the top right for all the buttons
+    card.buttons = $('<div></div>').addClass('card-buttons').text('').appendTo(card);
 
-        // card title div
-        card.title = $('<div></div>').addClass('card-title').text("Waiting for data ...").appendTo(card);
+    // card title div
+    card.title = $('<div></div>').addClass('card-title').text("Waiting for data ...").appendTo(card);
 
-        // card content div
-        card.content = $('<div></div>').addClass('card-content').text('').appendTo(card);
+    // card content div
+    card.content = $('<div></div>').addClass('card-content').text('').appendTo(card);
 
-        // card pause button
-        let menuId = 'menu-' + Math.floor(Math.random() * 1e6);
+    // card pause button
+    let menuId = 'menu-' + Math.floor(Math.random() * 1e6);
 
-        card.settingsButton = $('<button id="' + menuId + '"></button>')
-        .addClass('mdl-button')
-        .addClass('mdl-js-button')
-        .addClass('mdl-button--icon')
-        .addClass('mdl-button--colored')
-        .append($('<i></i>').addClass('material-icons').text('more_vert'))
-        .appendTo(card.buttons);
-        /*card.settingsButton.click(function(e) {
-          console.log("not implemented yet");
-        });*/
+    card.settingsButton = $('<button id="' + menuId + '"></button>')
+    .addClass('mdl-button')
+    .addClass('mdl-js-button')
+    .addClass('mdl-button--icon')
+    .addClass('mdl-button--colored')
+    .append($('<i></i>').addClass('material-icons').text('more_vert'))
+    .appendTo(card.buttons);
+    /*card.settingsButton.click(function(e) {
+      console.log("not implemented yet");
+    });*/
 
-        card.menu = $('<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" \
-          for="' + menuId + '"></ul>').appendTo(card);
+    card.menu = $('<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" \
+      for="' + menuId + '"></ul>').appendTo(card);
 
-        // <li class="mdl-menu__item">Some Action</li> \
-        // <li class="mdl-menu__item mdl-menu__item--full-bleed-divider">Another Action</li> \
-        // <li disabled class="mdl-menu__item">Disabled Action</li> \
-        // <li class="mdl-menu__item">Yet Another Action</li> \
+    // <li class="mdl-menu__item">Some Action</li> \
+    // <li class="mdl-menu__item mdl-menu__item--full-bleed-divider">Another Action</li> \
+    // <li disabled class="mdl-menu__item">Disabled Action</li> \
+    // <li class="mdl-menu__item">Yet Another Action</li> \
 
-        let viewers = Viewer.getViewersForType(this.topicType);
-        for(let i in viewers) {
-          let item = $('<li ' + (viewers[i].name === this.constructor.name ? 'disabled' : '') + ' class="mdl-menu__item">' + viewers[i].friendlyName + '</li>').appendTo(this.card.menu);
-          let that = this;
-          item.click(() => { Viewer.onSwitchViewer(that, viewers[i]); });
-        }
-
-        componentHandler.upgradeAllRegistered();
-
-        // card pause button
-        card.pauseButton = $('<button></button>')
-          .addClass('mdl-button')
-          .addClass('mdl-js-button')
-          .addClass('mdl-button--icon')
-          .addClass('mdl-button--colored')
-          .append($('<i></i>').addClass('material-icons').text('pause'))
-          .appendTo(card.buttons);
-          card.pauseButton.click(function(e) {
-            that.isPaused = !that.isPaused;
-            that.card.pauseButton.find('i').text(that.isPaused ? 'play_arrow' : 'pause');
-          });
-
-        // card close button
-        card.closeButton = $('<button></button>')
-          .addClass('mdl-button')
-          .addClass('mdl-js-button')
-          .addClass('mdl-button--icon')
-          .append($('<i></i>').addClass('material-icons').text('close'))
-          .appendTo(card.buttons);
-        card.closeButton.click(() => { Viewer.onClose(that); });
+    let viewers = Viewer.getViewersForType(this.topicType);
+    for(let i in viewers) {
+      let item = $('<li ' + (viewers[i].name === this.constructor.name ? 'disabled' : '') + ' class="mdl-menu__item">' + viewers[i].friendlyName + '</li>').appendTo(this.card.menu);
+      let that = this;
+      item.click(() => { Viewer.onSwitchViewer(that, viewers[i]); });
     }
-    else {
-        // div container at the top right for all the buttons
-        card.buttons = $('<div></div>').addClass('card-buttons').text('').appendTo(card);
-            
-        // card title div
-        card.title = $('<div></div>').addClass('card-title').text("Waiting for data ...").appendTo(card);
-            
-        // card content div
-        card.content = $('<div></div>').addClass('card-content').text('').appendTo(card);
-            
-        // card pause button
-        let menuId = 'menu-' + Math.floor(Math.random() * 1e6);
-            
-        card.settingsButton = $('<button id="' + menuId + '"></button>')
-        .addClass('mdl-button')
-        .addClass('mdl-js-button')
-        .addClass('mdl-button--icon')
-        .addClass('mdl-button--colored')
-        .append($('<i></i>').addClass('material-icons').text('more_vert'))
-        .appendTo(card.buttons);
-        
-        card.menu = $('<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" \
-          for="' + menuId + '"></ul>').appendTo(card);
-        
-        let viewers = Viewer.getViewersForType(this.topicType);
-        for(let i in viewers) {
-          let item = $('<li ' + (viewers[i].name === this.constructor.name ? 'disabled' : '') + ' class="mdl-menu__item">' + viewers[i].friendlyName + '</li>').appendTo(this.card.menu);
-          let that = this;
-          item.click(() => { Viewer.onSwitchViewer(that, viewers[i]); });
-        }
-        
-        componentHandler.upgradeAllRegistered();
 
-    card.battery = $('<span class="mdl-chip"><span class="mdl-chip__text">battery</span></span>').appendTo(card.buttons);
-    card.signal = $('<span class="mdl-chip"><span class="mdl-chip__text">signal</span></span>').appendTo(card.buttons);
-    }
+    componentHandler.upgradeAllRegistered();
+
+    // card pause button
+    card.pauseButton = $('<button></button>')
+      .addClass('mdl-button')
+      .addClass('mdl-js-button')
+      .addClass('mdl-button--icon')
+      .addClass('mdl-button--colored')
+      .append($('<i></i>').addClass('material-icons').text('pause'))
+      .appendTo(card.buttons);
+      card.pauseButton.click(function(e) {
+        that.isPaused = !that.isPaused;
+        that.card.pauseButton.find('i').text(that.isPaused ? 'play_arrow' : 'pause');
+      });
+
+    // card close button
+    card.closeButton = $('<button></button>')
+      .addClass('mdl-button')
+      .addClass('mdl-js-button')
+      .addClass('mdl-button--icon')
+      .append($('<i></i>').addClass('material-icons').text('close'))
+      .appendTo(card.buttons);
+    card.closeButton.click(() => { Viewer.onClose(that); });
 
     // call onCreate(); child class will override this and initialize its UI
     this.onCreate();
