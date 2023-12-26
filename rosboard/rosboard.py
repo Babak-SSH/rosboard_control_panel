@@ -168,6 +168,11 @@ class ROSBoardNode(object):
             if 'x' in ROSBoardSocketHandler.joy_msg and 'y' in ROSBoardSocketHandler.joy_msg:
                 joy.buttons = [0,0,0,0,0,0,0,0,0,0,0]
                 joy.axes = [0,0,0,0,0,0,0,0]
+                joy.buttons[0] = ROSBoardSocketHandler.joy_msg['A']
+                joy.buttons[2] = ROSBoardSocketHandler.joy_msg['X']
+                joy.buttons[1] = ROSBoardSocketHandler.joy_msg['B']
+                joy.buttons[3] = ROSBoardSocketHandler.joy_msg['Y']
+                joy.buttons[5] = ROSBoardSocketHandler.joy_msg['R1']
                 joy.axes[3] = -float(ROSBoardSocketHandler.joy_msg['x'])
                 joy.axes[4] = -float(ROSBoardSocketHandler.joy_msg['y'])
                 joy.axes[0] = -float(ROSBoardSocketHandler.joy_msg['r'])
