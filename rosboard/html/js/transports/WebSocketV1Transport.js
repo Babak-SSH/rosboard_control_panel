@@ -7,9 +7,6 @@ class WebSocketV1Transport {
       this.onTopics = onTopics ? onTopics.bind(this) : null;
       this.onSystem = onSystem ? onSystem.bind(this) : null;
       this.ws = null;
-      this.joystickX = 0.0;
-      this.joystickY = 0.0;
-      this.joystickR = 0.0;
     }
   
     connect() {
@@ -53,11 +50,6 @@ class WebSocketV1Transport {
         else if(wsMsgType === WebSocketV1Transport.MSG_TOPICS && that.onTopics) that.onTopics(data[1]);
         else if(wsMsgType === WebSocketV1Transport.MSG_SYSTEM && that.onSystem) that.onSystem(data[1]);
         else console.log("received unknown message: " + wsmsg.data);
-
-        this.send(JSON.stringify([WebSocketV1Transport.JOY_MSG, {
-            ["x"]: that.joystickX.toFixed(3),
-            ["y"]: that.joystickY.toFixed(3),
-            ["r"]: that.joystickR.toFixed(3),}]));
       }
     }
   
@@ -73,10 +65,32 @@ class WebSocketV1Transport {
       this.ws.send(JSON.stringify([WebSocketV1Transport.MSG_UNSUB, {topicName: topicName}]));
     }
 
-    update_joy({joystickX, joystickY, joystickR}) {
-        this.joystickX = joystickX;
-        this.joystickY = joystickY;
-        this.joystickR = joystickR;
+    update_joy({joystickRX, joystickRY, joystickLX, joystickLY,
+        joystickDUp, joystickDDown, joystickDRight, joystickDLeft,
+        joystickButtonA, joystickButtonX, joystickButtonB, joystickButtonY, 
+        joystickButtonR1, joystickButtonR2, joystickButtonL1, joystickButtonL2,
+        joystickRSB, joystickLSB, joystickEdit}) {
+        this.ws.send(JSON.stringify([WebSocketV1Transport.JOY_MSG, {
+        ["A"]: joystickButtonA,
+        ["X"]: joystickButtonX,
+        ["B"]: joystickButtonB,
+        ["Y"]: joystickButtonY,
+        ["R1"]: joystickButtonR1,
+        ["R2"]: joystickButtonR2,
+        ["L1"]: joystickButtonL1,
+        ["L2"]: joystickButtonL2,
+        ["RSB"]: joystickRSB,
+        ["LSB"]: joystickLSB,
+        ["Edit"]: joystickEdit,
+        ["DUp"]: joystickDUp,
+        ["DDown"]: joystickDDown,
+        ["DRght"]: joystickDRight,
+        ["DLeft"]: joystickDLeft,
+        ["rx"]: joystickRX.toFixed(3),
+        ["ry"]: joystickRY.toFixed(3),
+        ["lx"]: joystickLX.toFixed(3),
+        ["ly"]: joystickLY.toFixed(3),
+    }]));
     }
   }
   

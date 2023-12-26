@@ -93,11 +93,41 @@ const gamepadAPI = {
             let joystickButtonB = gamepadAPI.buttonPressed('B', 'hold')
             let joystickButtonY = gamepadAPI.buttonPressed('Y', 'hold')
             let joystickButtonR1 = gamepadAPI.buttonPressed('R1', 'hold')
-            let joystickX = parseFloat(gamepadAPI.axesStatus[2]);
-            let joystickY = parseFloat(gamepadAPI.axesStatus[3]);
-            let joystickR = parseFloat(gamepadAPI.axesStatus[0]);
+            let joystickButtonR2 = gamepadAPI.buttonPressed('R2', 'hold')
+            let joystickButtonL1 = gamepadAPI.buttonPressed('L1', 'hold')
+            let joystickButtonL2 = gamepadAPI.buttonPressed('L2', 'hold')
+            let joystickRSB = gamepadAPI.buttonPressed('RStick-Button', 'hold')
+            let joystickLSB = gamepadAPI.buttonPressed('LStick-Button', 'hold')
+            let joystickEdit = gamepadAPI.buttonPressed('Edit', 'hold')
+            let joystickRX = parseFloat(gamepadAPI.axesStatus[2]);
+            let joystickRY = parseFloat(gamepadAPI.axesStatus[3]);
+            let joystickLX = parseFloat(gamepadAPI.axesStatus[0]);
+            let joystickLY = parseFloat(gamepadAPI.axesStatus[1]);
+            let joystickDUp = false;
+            let joystickDDown = false;
+            let joystickDRight = false;
+            let joystickDLeft = false;
 
-            currentTransport.update_joy({joystickX, joystickY, joystickR, joystickButtonA, joystickButtonX, joystickButtonB, joystickButtonY, joystickButtonR1});
+            if (gamepadAPI.axesStatus[7] > 0) {
+                joystickDUp = true;
+                joystickDDown = false;
+            } else if (gamepadAPI.axesStatus[7] < 0) {
+                joystickDUp = false;
+                joystickDDown = true;
+            }
+            if (gamepadAPI.axesStatus[6] > 0) {
+                joystickDRight = true;
+                joystickDLeft = false;
+            } else if (gamepadAPI.axesStatus[6] < 0) {
+                joystickDRight = false;
+                joystickDLeft = true;
+            }
+
+            currentTransport.update_joy({joystickRX, joystickRY, joystickLX, joystickLY,
+                                        joystickDUp, joystickDDown, joystickDRight, joystickDLeft,
+                                        joystickButtonA, joystickButtonX, joystickButtonB, joystickButtonY, 
+                                        joystickButtonR1, joystickButtonR2, joystickButtonL1, joystickButtonL2,
+                                        joystickRSB, joystickLSB, joystickEdit});
     }, 100)},
     buttons: [],
 	computer_buttons: [ // TSCO layout

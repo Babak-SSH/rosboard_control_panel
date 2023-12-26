@@ -165,17 +165,31 @@ class ROSBoardNode(object):
             time.sleep(0.1)
             if not isinstance(ROSBoardSocketHandler.joy_msg, dict):
                 continue
-            if 'x' in ROSBoardSocketHandler.joy_msg and 'y' in ROSBoardSocketHandler.joy_msg:
-                joy.buttons = [0,0,0,0,0,0,0,0,0,0,0]
-                joy.axes = [0,0,0,0,0,0,0,0]
-                joy.buttons[0] = ROSBoardSocketHandler.joy_msg['A']
-                joy.buttons[2] = ROSBoardSocketHandler.joy_msg['X']
-                joy.buttons[1] = ROSBoardSocketHandler.joy_msg['B']
-                joy.buttons[3] = ROSBoardSocketHandler.joy_msg['Y']
-                joy.buttons[5] = ROSBoardSocketHandler.joy_msg['R1']
-                joy.axes[3] = -float(ROSBoardSocketHandler.joy_msg['x'])
-                joy.axes[4] = -float(ROSBoardSocketHandler.joy_msg['y'])
-                joy.axes[0] = -float(ROSBoardSocketHandler.joy_msg['r'])
+            joy.buttons = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            joy.axes = [0,0,0,0,0,0,0,0]
+
+            joy.buttons[0] = ROSBoardSocketHandler.joy_msg["A"]
+            joy.buttons[2] = ROSBoardSocketHandler.joy_msg["X"]
+            joy.buttons[1] = ROSBoardSocketHandler.joy_msg["B"]
+            joy.buttons[3] = ROSBoardSocketHandler.joy_msg["Y"]
+            joy.buttons[5] = ROSBoardSocketHandler.joy_msg["R1"]
+            joy.buttons[6] = ROSBoardSocketHandler.joy_msg["R2"]
+            joy.buttons[7] = ROSBoardSocketHandler.joy_msg["L1"]
+            joy.buttons[8] = ROSBoardSocketHandler.joy_msg["L2"]
+            joy.buttons[9] = ROSBoardSocketHandler.joy_msg["RSB"]
+            joy.buttons[10] = ROSBoardSocketHandler.joy_msg["LSB"]
+            joy.buttons[11] = ROSBoardSocketHandler.joy_msg["Edit"]
+            joy.buttons[12] = ROSBoardSocketHandler.joy_msg["DUp"]
+            joy.buttons[13] = ROSBoardSocketHandler.joy_msg["DDown"]
+            joy.buttons[14] = ROSBoardSocketHandler.joy_msg["DRght"]
+            joy.buttons[15] = ROSBoardSocketHandler.joy_msg["DLeft"]
+
+
+            joy.axes[3] = -float(ROSBoardSocketHandler.joy_msg["rx"])
+            joy.axes[4] = -float(ROSBoardSocketHandler.joy_msg["ry"])
+            joy.axes[0] = -float(ROSBoardSocketHandler.joy_msg["lx"])
+            joy.axes[1] = -float(ROSBoardSocketHandler.joy_msg["ly"])
+
             self.joy_pub.publish(joy)
 
     def pingpong_loop(self):
