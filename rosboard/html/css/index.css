@@ -113,38 +113,52 @@ input, textarea, *[contenteditable=true] {
 }
 
 .controller-card {
-  /* resize: both; */
   overflow: hidden;
-  /* overflow: hidden; */
-  /* border-radius:5pt; */
-  /* margin-left:20pt; */
-  /* margin-top:20pt; */
   background:#303030;
   color:#c0c0c0;
   box-shadow:3pt 3pt 3pt rgba(0,0,0,0.2);
   width: 100%;
-  /* bottom: 0; */
-  /* top: 10px; */
-  /* height: calc(100%-10pt); */
-  /* height: 1330px; */
-  /* margin-top: 64px; */
   height: 100%;
-  /* height: max-content; */
 }
 
 .controller-grid {
     position: static !important;
-    /* height:auto !important; */
-    /* height: 90% !important; */
-    /* height: 1330px !important; */
-    /* width: 100vw !important; */
     overflow: hidden;
 }
 
 #controller-content {
-    height: 100%;
     scroll-behavior: unset;
     overflow: hidden;
+}
+
+@media only screen and (max-device-width: 1000px) {
+    [fullscreen] #controller-img {
+        width: 95%;
+        margin-left: 2.5%;
+        height: 310px;
+    }
+
+    #controller-img {
+        width: 95%;
+        margin-left: 2.5%;
+        height: 230px;
+    }
+}
+
+@media only screen and (min-device-width: 1600px){
+    [fullscreen] #controller-img {
+        width: 100%;
+        height: 1520px;
+    }
+    
+    #controller-img {
+        width: 100%;
+        height: 1310px;
+    }
+}
+
+#controller-viewer {
+    font-size: 11pt;
 }
 
 .card {
@@ -201,6 +215,19 @@ input, textarea, *[contenteditable=true] {
   height:35pt;
 }
 
+.card-status {
+  position:absolute;
+  display:flex;
+  top:0;
+  right:50%;
+  font-size:12pt;
+  line-height:15pt;
+  align-items:center;
+  z-index:10;
+  font-weight:700;
+  height:35pt;
+}
+
 .card-button {
   width:16pt;
   height:16pt;
@@ -231,7 +258,6 @@ input, textarea, *[contenteditable=true] {
 @media screen and (min-width: 1200px) {
   .card {
     display:inline-block;
-    /* width:calc(33% - 40pt); */
     width:calc(66% - 40pt);
   }
 }
@@ -239,17 +265,8 @@ input, textarea, *[contenteditable=true] {
 @media screen and (min-width: 1800px) {
   .card {
     display:inline-block;
-    /* width:calc(25% - 40pt); */
     width:calc(50% - 40pt);
   }
-
-  /* .controller-card {
-    height: calc(100% -10pt) !important;
-  } */
-
-  /* .controller-grid {
-    height: calc(100% - 10pt) !important;
-  } */
 }
 
 html, body {
@@ -380,6 +397,132 @@ html, body {
   left: 0;
 }
 
+
+@media only screen and (max-device-width: 1000px) {
+    #mdl-header{
+        position:absolute;
+        height: 0%;
+        min-height: 0%;
+    }
+    .mdl-layout__tab-bar {
+        height: 100%;
+    }
+
+    .corner-icon {
+        font-size: medium; 
+    }
+
+    .corner-button {
+        width: 24px !important;
+        aspect-ratio: 1 !important;
+        height: auto;
+        min-width: initial;
+    }
+
+    #plus-button {
+        bottom: 44px;
+        left: 10px;
+    }
+
+    #menu-button {
+        bottom: 10px;
+        left: 44px;
+    }
+
+    #fullscreen-button {
+        bottom: 10px;
+        left: 10px;
+    }
+}
+
+@media only screen and (min-device-width: 1600px){
+    #mdl-header{
+        display: flex;
+        position:absolute;
+        height: 0%;
+        min-height: 0%;
+    }
+    .mdl-layout__tab-bar {
+        height: 100%;
+    }
+
+    .corner-icon {
+        font-size: x-large; 
+    }
+
+    .corner-button {
+        width: 56px !important;
+        aspect-ratio: 1 !important;
+        height: auto;
+        min-width: initial;
+    }
+
+    #plus-button {
+        bottom: 7%;
+        left: 1%;
+    }
+
+    #menu-button {
+        bottom: 2%;
+        left: 1%;
+    }
+
+    #fullscreen-button {
+        bottom: 2%;
+        left: 5%;
+    }
+}
+
+#plus-button {
+    position: fixed;
+    color: indigo !important;
+    background-color:linen  !important;
+    z-index: 11;
+}
+
+#menu-button {
+    position: absolute;
+    background: rgba(0,0,0,0.05);
+    border:  0;
+    border-radius: 50%;
+    box-sizing: border-box;
+    transition:  transform .3s;
+    cursor:  pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+    background-color: linen;
+}
+
+#fullscreen-button {
+    position: absolute;
+    background: rgba(0,0,0,0.05);
+    border:  0;
+    border-radius: 50%;
+    box-sizing: border-box;
+    transition:  transform .3s;
+    cursor:  pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+    /* top: calc(100% - 50pt); */
+    background-color: linen;
+}
+#fullscreen-button:hover {
+    transform: scale(1.125);
+}
+#fullscreen-button svg:nth-child(2) { 
+    display: none;
+}
+[fullscreen] #fullscreen-button svg:nth-child(1) {
+    display: none;
+}
+[fullscreen] #fullscreen-button svg:nth-child(2) {
+    display: inline-block;
+}
+
 .topics-nav-title {
   text-transform:uppercase;
   color:#808080;
@@ -442,37 +585,6 @@ html, body {
 body, ::backdrop {
     background: #fff;
 }
-#fullscreen-button {
-    position: absolute;
-    bottom: 15px;
-    /* left:  10px; */
-    left: calc(0% + 10px);
-    background: rgba(0,0,0,0.05);
-    border:  0;
-    width:  40px;
-    height:  40px;
-    border-radius: 50%;
-    box-sizing: border-box;
-    transition:  transform .3s;
-    cursor:  pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    z-index: 10;
-    top: calc(100% - 50pt);
-}
-#fullscreen-button:hover {
-    transform: scale(1.125);
-}
-#fullscreen-button svg:nth-child(2) { 
-    display: none;
-}
-[fullscreen] #fullscreen-button svg:nth-child(1) {
-    display: none;
-}
-[fullscreen] #fullscreen-button svg:nth-child(2) {
-    display: inline-block;
-}
 
 .chat-section {
     width: 100%;
@@ -496,6 +608,8 @@ input {
     rgba(0, 0, 0, .05) 0px 4px 6px,
     rgba(0, 0, 0, .05) 0px 12px 3px,
     rgba(0, 0, 0, .09) 0px -3px 5px;
+    direction: rtl;
+    text-align: center;
 }
 
 input:focus {
@@ -550,6 +664,21 @@ input:focus {
     margin-top: 10%;
     margin-left: 10%;
 }
+
+.gamepad-on-icon {
+    background: url('./images/gamepad-connected-30px.png');
+    height: 30px;
+    width: 30px;
+    display: block;
+}
+
+.gamepad-off-icon {
+    background: url('./images/gamepad-disconnected-30px.png');
+    height: 30px;
+    width: 30px;
+    display: block;
+}
+
 
 @-webkit-keyframes load6 {
   0% {
