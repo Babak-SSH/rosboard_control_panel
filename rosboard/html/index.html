@@ -18,16 +18,17 @@
         <script text="text/javascript" src="js/import-helper.js"></script>
         <script type="text/javascript" src="js/material.min.js" defer></script>
         <script type="text/javascript" src="js/leaflet.js"></script>        
-	      <script type="text/javascript" src="js/gl-matrix.js"></script>
-	      <script type="text/javascript" src="js/litegl.min.js"></script>
+	    <script type="text/javascript" src="js/gl-matrix.js"></script>
+	    <script type="text/javascript" src="js/litegl.min.js"></script>
         <script type="text/javascript" src="js/index.js" defer></script>
 
         <title>ROSboard</title>
     </head>
     <body>
-        <div id="test-mdl" class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+        <div id="mdl-layout-main" class="mdl-layout mdl-js-layout mdl-layout--fixed-header
         mdl-layout--fixed-tabs">
-            <header class="mdl-layout__header">
+            <header id="mdl-header" class="mdl-layout__header mdl-layout--no-drawer-button" style="display: flex;">
+
                 <div class="mdl-layout__header-row">
                 <!-- Title -->
                     <!-- <span class="mdl-layout-title">Title</span> -->
@@ -41,6 +42,7 @@
                     <a href="#fixed-tab-5" class="mdl-layout__tab">Options</a>
                 </div>
             </header>
+            
             <div class="mdl-layout__drawer">
                 <span class="mdl-layout-title">Title</span>
                 <nav id="topics-nav" class="mdl-navigation">
@@ -51,9 +53,13 @@
                     <div style="opacity:0.3;" id="topics-nav-unsupported"></div>
                 </nav>
             </div>
+
             <main class="mdl-layout__content">
                 <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
                     <div class="page-content">
+                        <button id="plus-button" onClick="GetDrawer()" class="corner-button mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+                            <i class="corner-icon material-icons">add</i>
+                        </button>
                         <div class="status-grid">
                         </div>
                     </div>
@@ -100,6 +106,9 @@
                             <button id="mic-icon" onClick="GetSpeech()" class="mdl-button mdl-js-button mdl-button--fab">
                                 <i class="material-icons">mic</i>
                             </button>
+                            <button id="mic-icon" onClick="textToSpeech()" class="mdl-button mdl-js-button mdl-button--fab">
+                                <i class="material-icons">volume_up</i>
+                            </button>
                         </div>
                         <p id="result"></p>
                     </div>
@@ -121,10 +130,9 @@
               </main> 
           </div> 
         
-  <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
-    <div class="mdl-snackbar__text"></div>
-    <button class="mdl-snackbar__action" type="button"></button>
-  </div>
+    <button id="menu-button" onClick="ToggleTabMenu()" class="corner-button mdl-button mdl-js-button mdl-button--fab">
+        <i class="corner-icon material-icons">menu</i>
+    </button>
 
     </body>
 </html>
