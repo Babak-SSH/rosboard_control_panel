@@ -616,6 +616,11 @@ input:focus {
     outline: none;
 }
 
+.message {
+    color:#999;
+    padding: 1em 0;
+}
+
 .input-section {
     position: relative;
     width: 100%;
@@ -643,18 +648,6 @@ input:focus {
     background-color: white;
 }
 
-#command-content button {
-    /* float: ; */
-    display: inline;
-    margin-right: 5%;
-    margin-left: 5%;
-    margin-top: 5%;
-    align-items: center;
-    width: 580px !important;
-    height: 250px !important;
-    background-color: #a05050;
-}
-
 #volume-bar {
     margin-top: 10%;
     margin-left: 10%;
@@ -679,6 +672,41 @@ input:focus {
     display: block;
 }
 
+#command-content {
+    margin: 5%;
+    display: grid;
+	width: 1fr;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 1em;
+	padding-top: 20px;
+}
+
+@media only screen and (max-device-width: 1000px){
+    #command-content  button {
+        height: 100px;
+        padding: 10px;
+    	text-align: center;
+    	cursor: pointer;
+    	background-color: rgb(102, 22, 159);
+    	font-size: 1.2em;
+    	border-radius: 5px;
+    	box-shadow: 1px 1px 1px #333;
+    	transition: .2s;
+    }
+}
+
+@media only screen and (min-device-width: 1600px){
+    #command-content  button {
+        height: 300px;
+        padding: 10px;
+    	text-align: center;
+    	cursor: pointer;
+    	background-color: rgb(102, 22, 159);
+    	font-size: 2em;
+    	border-radius: 5px;
+    	transition: .2s;
+    }
+}
 
 @-webkit-keyframes load6 {
   0% {
