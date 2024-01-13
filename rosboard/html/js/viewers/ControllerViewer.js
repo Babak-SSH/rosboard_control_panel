@@ -6,83 +6,109 @@ class ControllerViewer extends Viewer {
     * @override
   **/
   onCreate() {
-    this.viewerNode = $('<div></div>')
+    this.viewerNode = $('<div id="controller-viewer"></div>')
       .css({'font-size': '11pt',
-            // 'height': '600px',
-            // 'width': '800px'
         })
       .appendTo(this.card.content);
     
-      this.leftJoyId = "joy-" + Math.floor(Math.random()*10000);
-      this.leftJoy = $('<div id="' + this.leftJoyId + '"></div>')
+    //   this.card.gamepad = $('<label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-1"><input type="checkbox" id="icon-toggle-1" class="mdl-icon-toggle__input" disabled><i class="mdl-icon-toggle__label material-icons">gamepad</i></label>').appendTo(this.card.buttons);
+    //   var toggle1 = document.getElementById("icon-toggle-1");
+    //   toggle1.checked = true;
+
+    this.card.statusBar = $('<div></div>').addClass('card-status').text('').appendTo(this.card);
+    this.card.gamepad = $('<span id="gamepad-toggle" class="gamepad-off-icon"></span>').appendTo(this.card.statusBar);
+    this.card.closeButton.remove();
+    this.card.pauseButton.remove();
+
+    let joySize = 80;
+    if (mobileCheck()) {
+        joySize = 100;
+    } else {
+        joySize = 250;
+    }
+
+    this.leftJoyId = "joyLeft";
+    this.leftJoy = $('<div id="' + this.leftJoyId + '"></div>')
         .css({
             "width": "20%",
             "margin-right": "80%"
         })
         .appendTo(this.viewerNode);
     
-    this.img = $('<img></img>')
-      .css({"width": "60%",
-            "margin-left": "20%",
-        })
+    this.img = $('<img id="controller-img"></img>')
       .appendTo(this.viewerNode);
 
-
-      this.rightJoyId = "joy-" + Math.floor(Math.random()*10000);
-      this.rightJoy = $('<div id="' + this.rightJoyId + '"></div>')
+    this.rightJoyId = "joyRight";
+    this.rightJoy = $('<div id="' + this.rightJoyId + '"></div>')
         .css({
             "width": "20%",
             "margin-left": "80%"
         })
         .appendTo(this.viewerNode);
 
+    // this.xybuttons = $('<div><button class="mdl-button mdl-js-button mdl-button--fab"><i class="material-icons">add</i></button></div>')
+    //     .css({
+    //         "width": "20%",
+    //         "margin-left": "80%",
+    //     })
+    //     .appendTo(this.rightJoy);
+
       
 
-        var semi_options = {
-            zone: document.getElementById(this.rightJoyId),
-            mode: 'semi',
-            color: 'blue', 
-            size: 50,
-            catchDistance: 100,
-            dynamicPage: true,    
-        };
+        // var semi_options = {
+        //     zone: document.getElementById(this.rightJoyId),
+        //     mode: 'semi',
+        //     color: 'blue', 
+        //     size: joySize,
+        //     catchDistance: 100,
+        //     dynamicPage: true,    
+        // };
         var static_options_right = {
             zone: document.getElementById(this.rightJoyId),
             mode: 'static',
             color: 'red', 
-            size: 80,
+            size: joySize,
             threshold: 100,
             position: {left: '90%', top: '50%'},
             dynamicPage: true, 
         };
         var right_manager = nipplejs.create(static_options_right);
         right_manager.on('start', function(evt, data) {
-          let joystickX = 0.0;
-          let joystickY = 0.0;
-          let joystickR = 0.0
+          let joystickRX = 0.0;
+          let joystickRY = 0.0;
           console.log("start")
-          currentTransport.update_joy({joystickX, joystickY, joystickR});
+          currentTransport.update_joy({joystickRX, joystickRY, joystickLX:0, joystickLY:0,
+                                        joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                        joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
+                                        joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                        joystickRSB:false, joystickLSB:false, joystickEdit:false});
         }).on('end', function(evt, data) {
-          let joystickX = 0.0;
-          let joystickY = 0.0;
-          let joystickR = 0.0
+          let joystickRX = 0.0;
+          let joystickRY = 0.0;
           console.log("end")
-          currentTransport.update_joy({joystickX, joystickY, joystickR});
+          currentTransport.update_joy({joystickRX, joystickRY, joystickLX:0, joystickLY:0,
+                                        joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                        joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
+                                        joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                        joystickRSB:false, joystickLSB:false, joystickEdit:false});
         }).on('move', function(evt, data) {
           let radian = data['angle']['radian'];
           let distance = data['distance'];
-          let joystickX = Math.max(Math.min(Math.cos(radian)/75*distance, 1), -1);
-          let joystickY = -1*Math.max(Math.min(Math.sin(radian)/75*distance , 1), -1);
-          let joystickR = 0.0
+          let joystickRX = Math.max(Math.min(Math.cos(radian)/75*distance, 1), -1);
+          let joystickRY = -1*Math.max(Math.min(Math.sin(radian)/75*distance , 1), -1);
           console.log(data)
-          currentTransport.update_joy({joystickX, joystickY, joystickR});
+          currentTransport.update_joy({joystickRX, joystickRY, joystickLX:0, joystickLY:0,
+                                        joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                        joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
+                                        joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                        joystickRSB:false, joystickLSB:false, joystickEdit:false});
         });
 
         var static_options_left = {
             zone: document.getElementById(this.leftJoyId),
             mode: 'static',
             color: 'red', 
-            size: 80,
+            size: joySize,
             threshold: 100,
             position: {left: '10%', top: '50%'},
             dynamicPage: true, 
@@ -90,23 +116,28 @@ class ControllerViewer extends Viewer {
         };
         var left_manager = nipplejs.create(static_options_left);
         left_manager.on('start', function(evt, data) {
-            let joystickX = 0.0;
-          let joystickY = 0.0;
-          let joystickR = 0.0;
-          currentTransport.update_joy({joystickX, joystickY, joystickR});
+            currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX:0, joystickLY:0,
+                                        joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                        joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
+                                        joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                        joystickRSB:false, joystickLSB:false, joystickEdit:false});
         }).on('end', function(evt, data) {
-            let joystickX = 0.0;
-          let joystickY = 0.0;
-            let joystickR = 0.0;
-          currentTransport.update_joy({joystickX, joystickY, joystickR});
+            currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX:0, joystickLY:0,
+                                        joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                        joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
+                                        joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                        joystickRSB:false, joystickLSB:false, joystickEdit:false});
         }).on('move', function(evt, data) {
-          let radian = data['angle']['radian'];
-          let distance = data['distance'];
-          let joystickX = 0.0;
-          let joystickY = 0.0;
-          let joystickR = Math.max(Math.min(Math.cos(radian)/75*distance, 1), -1);
-          console.log(data)
-          currentTransport.update_joy({joystickX, joystickY, joystickR});
+            let radian = data['angle']['radian'];
+            let distance = data['distance'];
+            let joystickLX = Math.max(Math.min(Math.cos(radian)/75*distance, 1), -1);
+            let joystickLY = -1*Math.max(Math.min(Math.sin(radian)/75*distance , 1), -1);
+            console.log(data)
+            currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX, joystickLY,
+                                        joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                        joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
+                                        joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                        joystickRSB:false, joystickLSB:false, joystickEdit:false});
         });
 
 
