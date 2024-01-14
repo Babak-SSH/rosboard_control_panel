@@ -181,6 +181,7 @@ const GetSpeech = () => {
     let recognition = new SpeechRecognition();
     recognition.lang = 'fa-IR'
 
+        var intxt = document.getElementById("input-text");
         recognition.onstart = () => {
             console.log("starting listening, speak in microphone");
         }
@@ -190,7 +191,6 @@ const GetSpeech = () => {
         }
         recognition.onresult = (result) => {
             console.log(result.results[0][0].transcript);
-            var intxt = document.getElementById("input-text");
             intxt.value += result.results[0][0].transcript;
          }
      
@@ -203,6 +203,28 @@ function mobileCheck() {
     return check;
 };
 
+function vbClick(butt) {
+    if (butt == 1) {
+        currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX:0, joystickLY:0,
+                                      joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                      joystickButtonA:true, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
+                                      joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                      joystickRSB:false, joystickLSB:false, joystickEdit:false});
+    } else if (butt == 2) {
+        currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX:0, joystickLY:0,
+                                      joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                      joystickButtonA:false, joystickButtonX:false, joystickButtonB:true, joystickButtonY:false, 
+                                      joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                      joystickRSB:false, joystickLSB:false, joystickEdit:false});
+    } else if (butt == 3) {
+        currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX:0, joystickLY:0,
+                                      joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                      joystickButtonA:false, joystickButtonX:true, joystickButtonB:false, joystickButtonY:false, 
+                                      joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                      joystickRSB:false, joystickLSB:false, joystickEdit:false});
+    }
+}
+
 function toggleGamepadStatus() {
     var gt = document.getElementById("gamepad-toggle");
     if (gt.className == "gamepad-on-icon") {
@@ -214,13 +236,22 @@ function toggleGamepadStatus() {
 
 function changeGamepad() {
     var virtualJoystickR = document.getElementById("joyRight");
-    var virtualJoystickL = document.getElementById("joyLeft")
+    var virtualJoystickL = document.getElementById("joyLeft");
+    var virtualButtonA = document.getElementById("Abutton");
+    var virtualButtonB = document.getElementById("Bbutton");
+    var virtualButtonX = document.getElementById("Xbutton");
     if (virtualJoystickR.style.display == "none") {
         virtualJoystickR.style.display = "block";
         virtualJoystickL.style.display = "block";
+        virtualButtonA.style.display = "block";
+        virtualButtonB.style.display = "block";
+        virtualButtonX.style.display = "block";
     } else {
         virtualJoystickR.style.display = "none";
         virtualJoystickL.style.display = "none";
+        virtualButtonA.style.display = "none";
+        virtualButtonB.style.display = "none";
+        virtualButtonX.style.display = "none";
     }
 }
 
