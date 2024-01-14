@@ -35,7 +35,7 @@ class ControllerViewer extends Viewer {
         })
         .appendTo(this.viewerNode);
     
-    this.img = $('<img id="controller-img"></img>')
+    this.img = $('<img id="controller-img"><button id="Abutton" onClick="vbClick(1)" class="joy-button mdl-button mdl-js-button mdl-button--fab">A</button><button id="Bbutton" onClick="vbClick(2)" class="joy-button mdl-button mdl-js-button mdl-button--fab">B</button><button id="Xbutton" onClick="vbClick(3)" class="joy-button mdl-button mdl-js-button mdl-button--fab">X</button></img>')
       .appendTo(this.viewerNode);
 
     this.rightJoyId = "joyRight";
@@ -46,14 +46,6 @@ class ControllerViewer extends Viewer {
         })
         .appendTo(this.viewerNode);
 
-    // this.xybuttons = $('<div><button class="mdl-button mdl-js-button mdl-button--fab"><i class="material-icons">add</i></button></div>')
-    //     .css({
-    //         "width": "20%",
-    //         "margin-left": "80%",
-    //     })
-    //     .appendTo(this.rightJoy);
-
-      
 
         // var semi_options = {
         //     zone: document.getElementById(this.rightJoyId),

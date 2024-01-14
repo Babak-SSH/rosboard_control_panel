@@ -131,6 +131,12 @@ input, textarea, *[contenteditable=true] {
     overflow: hidden;
 }
 
+#controller-img {
+    z-index: 91;
+    position: absolute;
+}
+
+
 @media only screen and (max-device-width: 1000px) {
     [fullscreen] #controller-img {
         width: 95%;
@@ -143,6 +149,51 @@ input, textarea, *[contenteditable=true] {
         margin-left: 2.5%;
         height: 230px;
     }
+
+    .joy-button {
+        z-index: 100;
+        position: absolute;
+        margin-left: 80%;
+        margin-top: 150px;
+        width: 56px !important;
+        aspect-ratio: 1 !important;
+        height: auto;
+        min-width: initial;
+        font-size: xx-large;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+    }
+    [fullscreen] .joy-button {
+        z-index: 100;
+        position: absolute;
+        margin-left: 80%;
+        margin-top: 250px;
+        width: 56px !important;
+        aspect-ratio: 1 !important;
+        height: auto;
+        min-width: initial;
+        font-size: xx-large;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+    }
+
+    #Abutton {
+        margin-left: 400px;
+    }
+
+    #Bbutton {
+        margin-left: 500px;
+    }
+
+    #Xbutton {
+        margin-left: 600px;
+    }
 }
 
 @media only screen and (min-device-width: 1600px){
@@ -153,7 +204,35 @@ input, textarea, *[contenteditable=true] {
     
     #controller-img {
         width: 100%;
-        height: 1310px;
+        height: 1420px;
+    }
+
+    .joy-button {
+        z-index: 100;
+        position: absolute;
+        margin-top: 1200px;
+        width: 156px !important;
+        aspect-ratio: 1 !important;
+        height: auto;
+        min-width: initial;
+        font-size: xx-large;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+    }
+
+    #Abutton {
+        margin-left: 1600px;
+    }
+
+    #Bbutton {
+        margin-left: 1800px;
+    }
+
+    #Xbutton {
+        margin-left: 2000px;
     }
 }
 
