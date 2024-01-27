@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-      <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+      <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" charset="UTF-8">
         <link href="css/material-icons.css" media="all" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="js/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="></script>
         <link rel="stylesheet" href="css/material.indigo-blue.min.css" />
@@ -35,11 +35,16 @@
                 </div>
                 <!-- Tabs -->
                 <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-                    <a href="#fixed-tab-1" class="mdl-layout__tab is-active">Status</a>
-                    <a id="tab2" href="#fixed-tab-2" class="mdl-layout__tab">Controller</a>
-                    <a href="#fixed-tab-3" class="mdl-layout__tab">Commands</a>
-                    <a href="#fixed-tab-4" class="mdl-layout__tab">FAQ</a>
-                    <a href="#fixed-tab-5" class="mdl-layout__tab">Options</a>
+                    <a lang="en" href="#fixed-tab-1" class="en mdl-layout__tab is-active">Status</a>
+                    <a lang="fa" href="#fixed-tab-1" class="fa mdl-layout__tab is-active">وضعیت</a>
+                    <a lang="en" id="tab2" href="#fixed-tab-2" class="en mdl-layout__tab">Controller</a>
+                    <a lang="fa" id="tab2" href="#fixed-tab-2" class="fa mdl-layout__tab">کنترلر</a>
+                    <a lang="en" href="#fixed-tab-3" class="en mdl-layout__tab">Commands</a>
+                    <a lang="fa" href="#fixed-tab-3" class="fa mdl-layout__tab">دستورات</a>
+                    <a lang="en" href="#fixed-tab-4" class="en mdl-layout__tab">help</a>
+                    <a lang="fa" href="#fixed-tab-4" class="fa mdl-layout__tab">راهنما</a>
+                    <a lang="en" href="#fixed-tab-5" class="en mdl-layout__tab">Options</a>
+                    <a lang="fa" href="#fixed-tab-5" class="fa mdl-layout__tab">تنطیمات</a>
                 </div>
             </header>
             
@@ -73,23 +78,41 @@
                 <section class="mdl-layout__tab-panel" id="fixed-tab-3">
                     <div id="command-content" class="page-content">
                         <!-- <div class="commands-grid"> -->
-                            <button id="bc1" class="command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--primary">
+                            <button lang="en" id="bc1" class="en command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--primary">
                               Sit Down
                             </button>
-                            <button id="bc2" class="command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <button lang="fa" id="bc1" class="fa command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--primary">
+                              بشین
+                            </button>
+                            <button lang="en" id="bc2" class="en command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                               Stand Up
                             </button>
-                            <button id="bc3" class="command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <button lang="fa" id="bc2" class="fa command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                              بایست
+                            </button>
+                            <button lang="en" id="bc3" class="en command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                               Jump
                             </button>
-                            <button id="bc4" class="command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <button lang="fa" id="bc3" class="fa command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                              بپر
+                            </button>
+                            <button lang="en" id="bc4" class="en command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                               Backflip
                             </button>
-                            <button id="bc5" class="command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <button lang="fa" id="bc4" class="fa command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                              پشتک
+                            </button>
+                            <button lang="en" id="bc5" class="en command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                               Random
                             </button>
-                            <button id="bc6" class="command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                              pattern 1
+                            <button lang="fa" id="bc5" class="fa command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                              تصادفی
+                            </button>
+                            <button lang="en" id="bc6" class="en command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                              chase
+                            </button>
+                            <button lang="fa" id="bc6" class="fa command-button mdl-js-ripple-effect mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                              تعقیب کن
                             </button>
                         <!-- </div> -->
                     </div>
@@ -98,7 +121,8 @@
                     <div class="page-content">
                         <h1>GPT</h1>
                         <div class="chat-section">
-                            <div id="message" class="message">Press mic icon and ask your question</div>
+                            <div lang="en" id="message" class="en message">Press mic icon and ask your question</div>
+                            <div lang="fa" id="message" class="fa message">آیکون میکروفون را فشار دهید و سوال خود را بپرسید</div>
                             <div class="input-section">
                                 <input id="input-text" type="text">
                                 <!-- Unicode character "U+27A2" -->
@@ -117,14 +141,22 @@
                 <section class="mdl-layout__tab-panel" id="fixed-tab-5">
                     <div class="page-content">
                         <!-- <div class="options-grid"> -->
-                            <label id="switch-onoff" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
-                                <input type="checkbox" id="switch-1" class="mdl-switch__input" checked>
-                                <span class="mdl-switch__label">Power</span>
-                            </label>
-                            <p id="volume-bar" style="width:300px">
-                                Volume
-                                <input class="mdl-slider mdl-js-slider" type="range" id="s1" min="0" max="10" value="4" step="2">
-                            </p>
+                        <label id="switch-onoff" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
+                            <input type="checkbox" id="switch-1" class="mdl-switch__input" checked>
+                            <span class="mdl-switch__label">Power</span>
+                        </label>
+                        <div class="language-selector__container">
+                            <label>
+                                <select class="js_language_selector" onchange="changeLang(this.value)">
+                                    <option value="en">en</option>
+                                    <option value="fa">fa</option>
+                                </select>
+                           </label>
+                        </div> 
+                        <p id="volume-bar" style="width:300px">
+                            Volume
+                            <input class="mdl-slider mdl-js-slider" type="range" id="s1" min="0" max="10" value="4" step="2">
+                        </p>
                         <!-- </div> -->
                     </div>
                 </section>

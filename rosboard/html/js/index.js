@@ -35,6 +35,35 @@ const outPutElement  = document.querySelector('#result');
 const inputElement   = document.querySelector('input');
 const buttonElement  = document.querySelector('button');
 
+// supported Language List
+var langList = ['en', 'fa'];
+// Get browser Language
+var userLang = navigator.language || navigator.userLanguage;
+// extract Language (en-US => en)
+userLang = userLang.substring(0, 2);
+changeLang(userLang);
+
+function changeLang(lang) {
+    userLang = lang;
+    langList.forEach((langEle) => {
+    if (langEle == lang) {
+        var langElems = document.querySelectorAll('.' + langEle)
+        langElems.forEach((elem) => {
+            elem.style.display = "block"
+        })
+    }
+    else {
+        hideLang(langEle)
+    }
+  })
+}
+
+function hideLang(lang) {
+    var langElems = document.querySelectorAll('.' + lang)
+    langElems.forEach((elem) => {
+        elem.style.display = "none"
+    })
+}
 
 function changeInput(value) {
     const inputElement = document.querySelector('input');
@@ -56,23 +85,28 @@ function voices() {
 
 
 async function getMessage() {
-        console.log('Success!');
-        const options = {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${API_KEY}`,
-                'Content-Type' : 'application/json'
-            }, 
-            body : JSON.stringify({
-                model : "gpt-3.5-turbo",
-                messages: [
-                	{role: "system", content: "you are a helpful asssistant which will answer the questions about the custom quadruped made in IUST (Iran university of science and technology) robotics lab and will respond in persian language."},
-                	
-                	{role: "assistant", content: "this quadruped is based on MIT's mini cheetah, the actuators are same on all four legs and the software is developed based on minicheetah's software. the main processor is a UPboard 2 which will be the brain of the robot and will have realsense d435i as camera on it. robot's name is marvin and is being developed in IUST university."},
-                	{role: "user", content: inputElement.value},],
-                max_tokens: 100
-            })
-        }
+    var lang;
+    if (userLang == "en") {
+        lang = "english";
+    } else if (userLang == "fa") {
+        lang = "persian";
+    }
+    const options = {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${API_KEY}`,
+            'Content-Type' : 'application/json'
+        }, 
+        body : JSON.stringify({
+            model : "gpt-3.5-turbo",
+            messages: [
+            	{role: "system", content: "you are a helpful asssistant which will answer the questions about the custom quadruped made in IUST (Iran university of science and technology) robotics lab and will respond in " + lang + " language."},
+            	
+            	{role: "assistant", content: "this quadruped is based on MIT's mini cheetah, the actuators are same on all four legs and the software is developed based on minicheetah's software. the main processor is a UPboard 2 which will be the brain of the robot and will have realsense d435i as camera on it. robot's name is marvin and is being developed in IUST university."},
+            	{role: "user", content: inputElement.value},],
+            max_tokens: 100
+        })
+    }
     try {
         const response = await fetch(API_URL, options);
         const data = await response.clone().json();
