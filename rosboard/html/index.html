@@ -141,23 +141,49 @@
                 <section class="mdl-layout__tab-panel" id="fixed-tab-5">
                     <div class="page-content">
                         <!-- <div class="options-grid"> -->
-                        <label id="switch-onoff" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
-                            <input type="checkbox" id="switch-1" class="mdl-switch__input" checked>
-                            <span class="mdl-switch__label">Power</span>
-                        </label>
-                        <div class="language-selector__container">
-                            <label>
+                        <div id="language-selector" class="language-selector__container">
+                            <label lang="en" class="en"> Language:</label>
+                            <label lang="fa" class="fa"> زبان:</label>
                                 <select class="js_language_selector" onchange="changeLang(this.value)">
                                     <option value="en">en</option>
                                     <option value="fa">fa</option>
                                 </select>
-                           </label>
                         </div> 
-                        <p id="volume-bar" style="width:300px">
-                            Volume
-                            <input class="mdl-slider mdl-js-slider" type="range" id="s1" min="0" max="10" value="4" step="2">
-                        </p>
-                        <!-- </div> -->
+                        <div id="power-switch">
+                            <label id="switch-onoff" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
+                                <input type="checkbox" id="switch-1" class="mdl-switch__input">
+                                <span lang="en" class="en mdl-switch__label">Bluetooth</span>
+                                <span lang="fa" class="fa mdl-switch__label">بلوتوث</span>
+                            </label>
+                        </div>
+                        <div id="avoidance-switch">
+                            <label id="switch-avoidance" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2">
+                                <input type="checkbox" id="switch-2" class="mdl-switch__input" checked>
+                                <span lang="en" class="en mdl-switch__label">Avoidance</span>
+                                <span lang="fa" class="fa mdl-switch__label">اجتناب</span>
+                            </label>
+                        </div>
+                        <div id="volume-bar">
+                            <p style="width:300px">
+                                <label lang="en" class="en">Volume</label>
+                                <label lang="fa" class="fa">صدا</label>
+                                <input class="mdl-slider mdl-js-slider" type="range" id="s1" min="0" max="100" value="50" step="5">
+                            </p>
+                        </div>
+                        <div id="speed-bar">
+                            <p style="width:300px">
+                                <label lang="en" class="en">Speed</label>
+                                <label lang="fa" class="fa">سرعت</label>
+                                <input class="mdl-slider mdl-js-slider" type="range" id="s2" min="0" max="4" value="0" step="1">
+                            </p>
+                        </div>
+                        <div id="headlight-bar">
+                            <p style="width:300px">
+                                <label lang="en" class="en">Headlight</label>
+                                <label lang="fa" class="fa">چراغ جلو</label>
+                                <input class="mdl-slider mdl-js-slider" type="range" id="s2" min="0" max="10" value="0" step="2">
+                            </p>
+                        </div>
                     </div>
                 </section>
               </main> 

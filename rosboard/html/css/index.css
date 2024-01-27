@@ -727,14 +727,42 @@ input:focus {
     background-color: white;
 }
 
-#volume-bar {
-    margin-top: 10%;
-    margin-left: 10%;
+#language-selector {
+    margin-top: 2%;
+    margin-left: 5%;
 }
 
 #switch-onoff {
-    margin-top: 10%;
-    margin-left: 10%;
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+#switch-avoidance {
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+#volume-bar {
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+#speed-bar {
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+#headlight-bar {
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+#s1 {
+    direction: ltr;
+}
+
+#s2 {
+    direction: ltr;
 }
 
 .gamepad-on-icon {
