@@ -119,7 +119,6 @@
                 </section>
                 <section class="mdl-layout__tab-panel" id="fixed-tab-4">
                     <div class="page-content">
-                        <h1>GPT</h1>
                         <div class="chat-section">
                             <div lang="en" id="message" class="en message">Press mic icon and ask your question</div>
                             <div lang="fa" id="message" class="fa message">آیکون میکروفون را فشار دهید و سوال خود را بپرسید</div>
@@ -130,9 +129,6 @@
                             </div>
                             <button id="mic-icon" onClick="GetSpeech()" class="mdl-button mdl-js-button mdl-button--fab">
                                 <i class="material-icons">mic</i>
-                            </button>
-                            <button id="mic-icon" onClick="textToSpeech()" class="mdl-button mdl-js-button mdl-button--fab">
-                                <i class="material-icons">volume_up</i>
                             </button>
                         </div>
                         <p id="result"></p>
@@ -174,7 +170,7 @@
                             <p style="width:300px">
                                 <label lang="en" class="en">Speed</label>
                                 <label lang="fa" class="fa">سرعت</label>
-                                <input class="mdl-slider mdl-js-slider" type="range" id="s2" min="0" max="4" value="0" step="1">
+                                <input class="mdl-slider mdl-js-slider" type="range" id="s2" min="0" max="4" value="1" step="1">
                             </p>
                         </div>
                         <div id="headlight-bar">
