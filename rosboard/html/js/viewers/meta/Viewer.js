@@ -238,12 +238,16 @@ Viewer.getDefaultViewerForType = (name, type) => {
 
   // go down the list of registered viewers and return the first match
   for(let i in Viewer._viewers) {
-    console.log(Viewer._viewers)
     if(Viewer._viewers[i].supportedTypes.includes(type)) {
-        console.log(type);
-        console.log(name);
-        if (name == "/d435/color/image_raw") {
+        if (name == colorTopic) {
             if (Viewer._viewers[i].name == "ControllerViewer") {
+                return Viewer._viewers[i];
+            }
+            else {
+                continue;
+            }
+        } else if (name == depthTopic) {
+            if (Viewer._viewers[i].name == "MiniImageViewer") {
                 return Viewer._viewers[i];
             }
             else {
