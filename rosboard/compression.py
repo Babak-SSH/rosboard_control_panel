@@ -150,7 +150,11 @@ def compress_compressed_image(msg, output):
         output["_error"] = "Error: %s" % str(e)
     output["_data_jpeg"] = base64.b64encode(img_jpeg).decode()
     output["_data_shape"] = list(original_shape)
-            
+
+def normalize_2d(matrix):
+    norm = np.linalg.norm(matrix)
+    matrix = matrix/norm  # normalized matrix
+    return matrix            
 
 def compress_image(msg, output):
     output["data"] = []
@@ -173,9 +177,9 @@ def compress_image(msg, output):
         cv2_img = np.stack((cv2_img[:,:,0], cv2_img[:,:,1], np.zeros(cv2_img[:,:,0].shape)), axis = -1)
 
     # enforce <800px max dimension, and do a stride-based resize
-    if cv2_img.shape[0] > 800 or cv2_img.shape[1] > 800:
-        stride = int(np.ceil(max(cv2_img.shape[0] / 800.0, cv2_img.shape[1] / 800.0)))
-        cv2_img = cv2_img[::stride,::stride]
+    # if cv2_img.shape[0] > 800 or cv2_img.shape[1] > 800:
+    #     stride = int(np.ceil(max(cv2_img.shape[0] / 800.0, cv2_img.shape[1] / 800.0)))
+    #     cv2_img = cv2_img[::stride,::stride]
     
     # if image format isn't already uint8, make it uint8 for visualization purposes
     if cv2_img.dtype != np.uint8:
@@ -186,6 +190,12 @@ def compress_image(msg, output):
             # keep only the most significant 8 bits (0 to 255)
             cv2_img = (cv2_img >> 24).astype(np.uint8)
         elif cv2_img.dtype == np.uint16:
+            imax = cv2_img.max()
+            dmax = np.iinfo(cv2_img.dtype).max
+            cv2_img = (normalize_2d(cv2_img)) * dmax
+            phi = 1
+            theta = 80
+            cv2_img = ((dmax/phi) * ((cv2_img/(dmax/theta))**0.5)).astype(np.uint16)
             # keep only the most significant 8 bits (0 to 255)
             cv2_img = (cv2_img >> 8).astype(np.uint8)
         elif cv2_img.dtype == np.float16 or cv2_img.dtype == np.float32 or cv2_img.dtype == np.float64:
