@@ -10,13 +10,17 @@ class ControllerViewer extends Viewer {
       .css({'font-size': '11pt',
         })
       .appendTo(this.card.content);
+
+    this.card.title.addClass("controller-title");
     
     //   this.card.gamepad = $('<label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-1"><input type="checkbox" id="icon-toggle-1" class="mdl-icon-toggle__input" disabled><i class="mdl-icon-toggle__label material-icons">gamepad</i></label>').appendTo(this.card.buttons);
     //   var toggle1 = document.getElementById("icon-toggle-1");
     //   toggle1.checked = true;
 
     this.card.statusBar = $('<div></div>').addClass('card-status').text('').appendTo(this.card);
-    this.card.gamepad = $('<span id="gamepad-toggle" class="gamepad-off-icon"></span>').appendTo(this.card.statusBar);
+    this.card.gamepad = $('<span id="gamepad-toggle" class="status-icon gamepad-off-icon"></span>').appendTo(this.card.statusBar);
+    // this.card.battery = $('<span id="gamepad-toggle" class="status-icon battery-icon"></span>').appendTo(this.card.statusBar);
+    // this.card.signal = $('<span id="gamepad-toggle" class="status-icon signal-icon"></span>').appendTo(this.card.statusBar);
     this.card.closeButton.remove();
     this.card.pauseButton.remove();
 
@@ -68,7 +72,6 @@ class ControllerViewer extends Viewer {
         right_manager.on('start', function(evt, data) {
           let joystickRX = 0.0;
           let joystickRY = 0.0;
-          console.log("start")
           currentTransport.update_joy({joystickRX, joystickRY, joystickLX:0, joystickLY:0,
                                         joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
                                         joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
@@ -77,7 +80,6 @@ class ControllerViewer extends Viewer {
         }).on('end', function(evt, data) {
           let joystickRX = 0.0;
           let joystickRY = 0.0;
-          console.log("end")
           currentTransport.update_joy({joystickRX, joystickRY, joystickLX:0, joystickLY:0,
                                         joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
                                         joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
@@ -88,7 +90,6 @@ class ControllerViewer extends Viewer {
           let distance = data['distance'];
           let joystickRX = Math.max(Math.min(Math.cos(radian)/75*distance, 1), -1);
           let joystickRY = -1*Math.max(Math.min(Math.sin(radian)/75*distance , 1), -1);
-          console.log(data)
           currentTransport.update_joy({joystickRX, joystickRY, joystickLX:0, joystickLY:0,
                                         joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
                                         joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
@@ -124,7 +125,6 @@ class ControllerViewer extends Viewer {
             let distance = data['distance'];
             let joystickLX = Math.max(Math.min(Math.cos(radian)/75*distance, 1), -1);
             let joystickLY = -1*Math.max(Math.min(Math.sin(radian)/75*distance , 1), -1);
-            console.log(data)
             currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX, joystickLY,
                                         joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
                                         joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
@@ -173,7 +173,7 @@ class ControllerViewer extends Viewer {
   }
 
   onData(msg) {
-    this.card.title.text("Controller");
+    this.card.title.text("");
 
     if(msg.__comp) {
       this.decodeAndRenderCompressed(msg);
@@ -201,6 +201,6 @@ ControllerViewer.supportedTypes = [
     "sensor_msgs/msg/Joy"
 ];
 
-ControllerViewer.maxUpdateRate = 24.0;
+ControllerViewer.maxUpdateRate = 64.0;
 
 Viewer.registerViewer(ControllerViewer);
