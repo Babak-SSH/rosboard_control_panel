@@ -112,6 +112,27 @@ input, textarea, *[contenteditable=true] {
   background:#202020;
 }
 
+.mini-image-card {
+    margin-top: 60px;
+    margin-left: 30px;
+    position: absolute;
+    z-index: 100;
+}
+
+@media only screen and (max-device-width: 1000px) {
+    #mini-image {
+        width: 100px;
+        height: 60px;
+    }
+}
+
+@media only screen and (min-device-width: 1600px) {
+    #mini-image {
+        width: 350px;
+        height: 200px;
+    }
+}
+
 .controller-card {
   overflow: hidden;
   background:#303030;
@@ -141,7 +162,7 @@ input, textarea, *[contenteditable=true] {
     [fullscreen] #controller-img {
         width: 95%;
         margin-left: 2.5%;
-        height: 310px;
+        height: 340px;
     }
 
     #controller-img {
@@ -298,7 +319,7 @@ input, textarea, *[contenteditable=true] {
   position:absolute;
   display:flex;
   top:0;
-  right:50%;
+  right:45%;
   font-size:12pt;
   line-height:15pt;
   align-items:center;
@@ -337,8 +358,16 @@ input, textarea, *[contenteditable=true] {
 @media screen and (min-width: 1200px) {
   .card {
     display:inline-block;
-    width:calc(66% - 40pt);
+    width:calc(45% - 40pt);
   }
+}
+
+@media only screen and (max-device-width: 1000px) {
+    .card{
+        display:inline-block;
+        /* width:calc(66% - 40pt); */
+        width: 300px;
+    }
 }
 
 @media screen and (min-width: 1800px) {
@@ -714,6 +743,25 @@ input:focus {
     transform: rotate(90deg);
 }
 
+@media only screen and (max-device-width: 1000px) {
+    #result {
+        text-align: center;
+        margin-top: 4%;
+        line-height: 1;
+        font-size:x-small;
+        direction: rtl;
+    }
+}
+
+@media only screen and (min-device-width: 1600px) {
+    #result {
+        text-align: center;
+        margin-top: 10%;
+        font-size: xx-large;
+        direction: rtl;
+    }
+}
+
 #result {
     text-align: center;
     margin-top: 10%;
@@ -765,17 +813,47 @@ input:focus {
     direction: ltr;
 }
 
+@media only screen and (max-device-width: 1000px){
+    .controller-title {
+        height: 10px;
+    }
+}
+
+@media only screen and (min-device-width: 1600px){
+    .controller-title {
+        height: 40px;
+    }
+}
+
+.status-icon {
+    margin: 5px;
+}
+
+.battery-icon {
+    background: url('./images/battery-20.png');
+    height: 20px;
+    width: 20px;
+    display: block;
+}
+
+.signal-icon {
+    background: url('./images/signal-20.png');
+    height: 20px;
+    width: 20px;
+    display: block;
+}
+
 .gamepad-on-icon {
-    background: url('./images/gamepad-connected-30px.png');
-    height: 30px;
-    width: 30px;
+    background: url('./images/gamepad-connected-20.png');
+    height: 20px;
+    width: 20px;
     display: block;
 }
 
 .gamepad-off-icon {
-    background: url('./images/gamepad-disconnected-30px.png');
-    height: 30px;
-    width: 30px;
+    background: url('./images/gamepad-disconnected-20.png');
+    height: 20px;
+    width: 20px;
     display: block;
 }
 
