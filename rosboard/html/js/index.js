@@ -16,6 +16,7 @@ importJsOnce("js/viewers/TimeSeriesPlotViewer.js");
 importJsOnce("js/viewers/PointCloud2Viewer.js");
 // importJsOnce("js/viewers/JoystickController.js");
 importJsOnce("js/viewers/ControllerViewer.js");
+importJsOnce("js/viewers/MiniImageViewer.js");
 
 // GenericViewer must be last
 importJsOnce("js/viewers/GenericViewer.js");
@@ -30,10 +31,13 @@ importJsOnce("js/Controller.js");
 const API_KEY = MyApiKey;
 const API_URL = "https://api.openai.com/v1/chat/completions";
 
+const colorTopic = ColorTopic;
+const depthTopic = DepthTopic;
+
 const submitButton   = document.querySelector('#submit');
 const outPutElement  = document.querySelector('#result');
-const inputElement   = document.querySelector('input');
-const buttonElement  = document.querySelector('button');
+const inputElement   = document.querySelector('#input-text');
+const buttonElement  = document.querySelector('#mic-icon');
 
 // supported Language List
 var langList = ['en', 'fa'];
@@ -100,19 +104,17 @@ async function getMessage() {
         body : JSON.stringify({
             model : "gpt-3.5-turbo",
             messages: [
-            	{role: "system", content: "you are a helpful asssistant which will answer the questions about the custom quadruped made in IUST (Iran university of science and technology) robotics lab and will respond in " + lang + " language."},
+            	{role: "system", content: ChatgptRole + " you will respond in " + lang + " language."},
             	
-            	{role: "assistant", content: "this quadruped is based on MIT's mini cheetah, the actuators are same on all four legs and the software is developed based on minicheetah's software. the main processor is a UPboard 2 which will be the brain of the robot and will have realsense d435i as camera on it. robot's name is marvin and is being developed in IUST university."},
+            	{role: "assistant", content: ChatgptContent + " you will respond in " + lang + " language."},
             	{role: "user", content: inputElement.value},],
-            max_tokens: 100
+            max_tokens: 400
         })
     }
     try {
         const response = await fetch(API_URL, options);
         const data = await response.clone().json();
-        console.log(data);
         outPutElement.textContent = data.choices[0].message.content;
-        // textToSpeech(data.choices[0].message.content);
     if ('speechSynthesis' in window) {
     }else{
       alert("Sorry, your browser doesn't support text to speech!");
@@ -157,31 +159,6 @@ async function getMessage() {
     } catch (error) {
         console.error(error);
     }
-}
-
-function textToSpeech(text) {
-    if ('speechSynthesis' in window) {
-    }else{
-      alert("Sorry, your browser doesn't support text to speech!");
-    }
-
-    console.log("speaking");
-    // var response = new SpeechSynthesisUtterance();
-    // response.text = text;
-    // response.lang = 'fa'
-    // window.speechSynthesis.speak(response);
-
-  // Create a new SpeechSynthesisUtterance object
-  let utterance = new SpeechSynthesisUtterance();
-
-  // Set the text and voice of the utterance
-  utterance.text = text;
-  utterance.lang = 'fa';
-  utterance.voice = window.speechSynthesis.getVoices()[0];
-
-  // Speak the utterance
-  window.speechSynthesis.speak(utterance);
-    
 }
 
 submitButton.addEventListener('click', getMessage);
@@ -237,6 +214,11 @@ function mobileCheck() {
     return check;
 };
 
+function sleep (time) {
+    // time in milliseconds
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 function vbClick(butt) {
     if (butt == 1) {
         currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX:0, joystickLY:0,
@@ -257,6 +239,13 @@ function vbClick(butt) {
                                       joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
                                       joystickRSB:false, joystickLSB:false, joystickEdit:false});
     }
+    sleep(50).then(() => {
+        currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX:0, joystickLY:0,
+                                      joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                      joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
+                                      joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                      joystickRSB:false, joystickLSB:false, joystickEdit:false});
+    });     
 }
 
 function toggleGamepadStatus() {
@@ -333,10 +322,20 @@ function toggle_fullscreen() {
 } 
 
 let controller_tab = document.getElementById("tab2");
-controller_tab.addEventListener("click", get_controller);
+controller_tab.addEventListener("click", get_controller, {once: true});
 function get_controller() {
-    initSubscribe({topicName: "/d435/color/image_raw", topicType: "sensor_msgs/Image"});
+    initMiniImage({topicName: depthTopic, topicType: "sensor_msgs/Image"});
+    initController({topicName: colorTopic, topicType: "sensor_msgs/Image"});
     document.body.style.overflow='hidden';
+}
+
+function changeSource() {
+    let m = subscriptions[colorTopic].viewer;
+    let s = subscriptions[depthTopic].viewer;
+
+    subscriptions[colorTopic].viewer = s;
+    subscriptions[depthTopic].viewer = m;
+    // currentTransport.unsubscribe({topicName:colorTopic});
 }
 
 var snackbarContainer = document.querySelector('#demo-toast-example');
@@ -415,8 +414,18 @@ function newController() {
     return card;
 }
 
+function newMiniImage() {
+    // creates mini image, adds it to the grid, and returns it.
+    let card= $("<div></div>").addClass('mini-image-card')
+        .appendTo($('#controller-content'));
+    return card;
+}
+
 let onOpen = function() {
   for(let topic_name in subscriptions) {
+    if (topic_name == colorTopic || topic_name == depthTopic) {
+        continue;
+    }
     console.log("Re-subscribing to " + topic_name);
     initSubscribe({topicName: topic_name, topicType: subscriptions[topic_name].topicType});
   }
@@ -526,6 +535,48 @@ function addTopicTreeToNav(topicTree, el, level = 0, path = "") {
   });
 }
 
+function initMiniImage({topicName, topicType}) {
+    if(!subscriptions[topicName]) {
+      subscriptions[topicName] = {
+        topicType: topicType,
+      }
+    }  
+    currentTransport.subscribe({topicName: topicName});
+    if(!subscriptions[topicName].viewer) {
+        let card = newMiniImage(); 
+
+        let viewer = Viewer.getDefaultViewerForType(topicName, topicType);
+        try {
+          subscriptions[topicName].viewer = new viewer(card, topicName, topicType);
+        } catch(e) {
+          console.log(e);
+          card.remove();
+        }
+    }
+    updateStoredSubscriptions();
+}
+
+function initController({topicName, topicType}) {
+    if(!subscriptions[topicName]) {
+      subscriptions[topicName] = {
+        topicType: topicType,
+      }
+    }  
+    currentTransport.subscribe({topicName: topicName});
+    if(!subscriptions[topicName].viewer) {
+        let card = newController(); 
+
+        let viewer = Viewer.getDefaultViewerForType(topicName, topicType);
+        try {
+          subscriptions[topicName].viewer = new viewer(card, topicName, topicType);
+        } catch(e) {
+          console.log(e);
+          card.remove();
+        }
+    }
+    updateStoredSubscriptions();
+}
+
 function initSubscribe({topicName, topicType}) {
   // creates a subscriber for topicName
   // and also initializes a viewer (if it doesn't already exist)
@@ -539,8 +590,10 @@ function initSubscribe({topicName, topicType}) {
   currentTransport.subscribe({topicName: topicName});
   if(!subscriptions[topicName].viewer) {
     let card;
-    if (topicName == "/d435/color/image_raw"){
-       card = newController(); 
+    if (topicName == colorTopic) {
+    //    card = newController(); 
+    } else if(topicName == depthTopic) {
+        // card = newMiniImage();
     } else {
         card = newCard();
     }
@@ -552,7 +605,7 @@ function initSubscribe({topicName, topicType}) {
       console.log(e);
       card.remove();
     }
-    if (topicName == "/d435/color/image_raw"){
+    if (topicName == colorTopic || topicName == depthTopic){
         // $controller_grid.masonry("appended", card);
     } else {
         $grid.masonry("appended", card);
