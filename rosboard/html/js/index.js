@@ -338,6 +338,44 @@ function changeSource() {
     // currentTransport.unsubscribe({topicName:colorTopic});
 }
 
+function setBattery(charge) {
+    let cell1 = document.getElementById("charge");
+    let cell2 = document.getElementById("charge2");
+    let cell3 = document.getElementById("charge3");
+    let cell4 = document.getElementById("charge4");
+    if (charge > 0) {
+        cell1.style.opacity = 1;
+        if (charge > 25) {
+            cell2.style.opacity = 1;
+            if (charge > 50) {
+                cell3.style.opacity = 1;
+                if (charge > 75) {
+                    cell4.style.opacity = 1;
+                }
+            }
+        }
+    }
+}
+
+function setSignal(power) {
+    let cell1 = document.getElementById("sbar1");
+    let cell2 = document.getElementById("sbar2");
+    let cell3 = document.getElementById("sbar3");
+    let cell4 = document.getElementById("sbar4");
+    if (power > 0) {
+        cell1.style.opacity = 1;
+        if (power > 25) {
+            cell2.style.opacity = 1;
+            if (power > 50) {
+                cell3.style.opacity = 1;
+                if (power > 75) {
+                    cell4.style.opacity = 1;
+                }
+            }
+        }
+    }
+}
+
 var snackbarContainer = document.querySelector('#demo-toast-example');
 
 let subscriptions = {};
