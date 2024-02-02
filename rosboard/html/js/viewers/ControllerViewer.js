@@ -13,14 +13,21 @@ class ControllerViewer extends Viewer {
 
     this.card.title.addClass("controller-title");
     
-    //   this.card.gamepad = $('<label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-1"><input type="checkbox" id="icon-toggle-1" class="mdl-icon-toggle__input" disabled><i class="mdl-icon-toggle__label material-icons">gamepad</i></label>').appendTo(this.card.buttons);
-    //   var toggle1 = document.getElementById("icon-toggle-1");
-    //   toggle1.checked = true;
-
     this.card.statusBar = $('<div></div>').addClass('card-status').text('').appendTo(this.card);
     this.card.gamepad = $('<span id="gamepad-toggle" class="status-icon gamepad-off-icon"></span>').appendTo(this.card.statusBar);
-    // this.card.battery = $('<span id="gamepad-toggle" class="status-icon battery-icon"></span>').appendTo(this.card.statusBar);
-    // this.card.signal = $('<span id="gamepad-toggle" class="status-icon signal-icon"></span>').appendTo(this.card.statusBar);
+    this.card.battery = $('<div class="status-icon battery">\
+                        <div class="top"></div>\
+                        <div id="charge"></div>\
+                        <div id="charge2"></div> \
+                        <div id="charge3"></div> \
+                        <div id="charge4"></div> \
+                        </div>').appendTo(this.card.statusBar);
+    this.card.signal = $('<div class="status-icon signal">\
+                        <div id="sbar1" class="bar" style="height: 25%"></div>\
+                        <div id="sbar2" class="bar" style="height: 50%"></div>\
+                        <div id="sbar3" class="bar" style="height: 75%"></div>\
+                        <div id="sbar4" class="bar" style="height: 100%"></div>\
+                        </div>').appendTo(this.card.statusBar);
     this.card.closeButton.remove();
     this.card.pauseButton.remove();
 
@@ -170,6 +177,10 @@ class ControllerViewer extends Viewer {
     this.lastMsg = null;
 
     super.onCreate();
+
+    // dummy functions can be removed
+    setBattery(50);
+    setSignal(50);
   }
 
   onData(msg) {
