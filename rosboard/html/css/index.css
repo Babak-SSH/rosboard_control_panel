@@ -741,6 +741,7 @@ input:focus {
     cursor: pointer;
     bottom: 15px;
     transform: rotate(90deg);
+    font-size: x-large;
 }
 
 @media only screen and (max-device-width: 1000px) {
@@ -750,6 +751,8 @@ input:focus {
         line-height: 1;
         font-size:x-small;
         direction: rtl;
+        margin-left: 5%;
+        margin-right: 5%;
     }
 }
 
