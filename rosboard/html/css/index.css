@@ -826,22 +826,105 @@ input:focus {
 }
 
 .status-icon {
-    margin: 5px;
+    margin-left: 20px;
 }
 
-.battery-icon {
-    background: url('./images/battery-20.png');
-    height: 20px;
-    width: 20px;
-    display: block;
+.battery{
+    height: 15px;
+    width: 25px;
+    border: 2px solid #103854;
+    border-radius: 8px;
+  }
+  
+  .top{
+    height: 5px;
+    width: 2px;
+    background-color: #103854;
+    position: relative;
+    left: 28px;
+    top: 4px;
+    border-radius: 0 1px 1px 0;
+  }
+  
+  #charge,#charge2,#charge3,#charge4{
+    width:5px;
+    height:10px;
+    background-color: #15bd26;
+    position: relative;
+    opacity: 0;
+    border-radius: 2px 2px 2px 2px;
+  }
+  
+  #charge{
+    bottom: 2px;
+    left: 1px;
+    /* can be used for charging animation */
+    /* animation: charge-1 3s infinite; */
+  }
+  
+  @keyframes charge-1{
+    25%,100%{
+      opacity: 1;
+    }
+  }
+  
+  #charge2{
+    bottom: 12px;
+    left: 7px;
+    /* animation: charge-2 3s infinite; */
+  }
+  
+  @keyframes charge-2{
+    0%,25%{
+      opacity: 0;
+    }
+    50%,100%{
+      opacity: 1;
+    }
+  }
+  
+  #charge3{
+    bottom: 22px;
+    left: 13px;
+    /* animation: charge-3 3s infinite; */
+  }
+  
+  @keyframes charge-3{
+    0%,50%{
+      opacity: 0;
+    }
+    70%,100%{
+      opacity: 1;
+    }
+  }
+  
+  #charge4{
+    bottom: 32px;
+    left: 19px;
+    /* animation: charge-4 3s infinite; */
+  }
+  
+  @keyframes charge-4{
+    0%,70%{
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
+    }
 }
 
-.signal-icon {
-    background: url('./images/signal-20.png');
-    height: 20px;
-    width: 20px;
-    display: block;
+div.signal {
+    /* margin-left: 80px; */
+    height: 15px;
+    width: 30px;
 }
+
+div.bar {
+    background-color: gray;
+    width: 12%;
+    display: inline-block;
+    opacity: 0.1;
+} 
 
 .gamepad-on-icon {
     background: url('./images/gamepad-connected-20.png');
