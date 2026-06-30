@@ -108,12 +108,163 @@ input, textarea, *[contenteditable=true] {
 }
 
 .mdl-layout__content {
+    height: 100%;
   background:#202020;
 }
 
+.mini-image-card {
+    margin-top: 60px;
+    margin-left: 30px;
+    position: absolute;
+    z-index: 100;
+}
+
+@media only screen and (max-device-width: 1000px) {
+    #mini-image {
+        width: 100px;
+        height: 60px;
+    }
+}
+
+@media only screen and (min-device-width: 1600px) {
+    #mini-image {
+        width: 350px;
+        height: 200px;
+    }
+}
+
+.controller-card {
+  overflow: hidden;
+  background:#303030;
+  color:#c0c0c0;
+  box-shadow:3pt 3pt 3pt rgba(0,0,0,0.2);
+  width: 100%;
+  height: 100%;
+}
+
+.controller-grid {
+    position: static !important;
+    overflow: hidden;
+}
+
+#controller-content {
+    scroll-behavior: unset;
+    overflow: hidden;
+}
+
+#controller-img {
+    z-index: 91;
+    position: absolute;
+}
+
+
+@media only screen and (max-device-width: 1000px) {
+    [fullscreen] #controller-img {
+        width: 95%;
+        margin-left: 2.5%;
+        height: 340px;
+    }
+
+    #controller-img {
+        width: 95%;
+        margin-left: 2.5%;
+        height: 230px;
+    }
+
+    .joy-button {
+        z-index: 100;
+        position: absolute;
+        margin-left: 80%;
+        margin-top: 150px;
+        width: 56px !important;
+        aspect-ratio: 1 !important;
+        height: auto;
+        min-width: initial;
+        font-size: xx-large;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+    }
+    [fullscreen] .joy-button {
+        z-index: 100;
+        position: absolute;
+        margin-left: 80%;
+        margin-top: 250px;
+        width: 56px !important;
+        aspect-ratio: 1 !important;
+        height: auto;
+        min-width: initial;
+        font-size: xx-large;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+    }
+
+    #Abutton {
+        margin-left: 400px;
+    }
+
+    #Bbutton {
+        margin-left: 500px;
+    }
+
+    #Xbutton {
+        margin-left: 600px;
+    }
+}
+
+@media only screen and (min-device-width: 1600px){
+    [fullscreen] #controller-img {
+        width: 100%;
+        height: 1520px;
+    }
+    
+    #controller-img {
+        width: 100%;
+        height: 1420px;
+    }
+
+    .joy-button {
+        z-index: 100;
+        position: absolute;
+        margin-top: 1200px;
+        width: 156px !important;
+        aspect-ratio: 1 !important;
+        height: auto;
+        min-width: initial;
+        font-size: xx-large;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+    }
+
+    #Abutton {
+        margin-left: 1600px;
+    }
+
+    #Bbutton {
+        margin-left: 1800px;
+    }
+
+    #Xbutton {
+        margin-left: 2000px;
+    }
+}
+
+#controller-viewer {
+    font-size: 11pt;
+}
+
 .card {
+  resize: both;
+  overflow: auto;
   border-radius:5pt;
-  overflow:hidden;
   margin-left:20pt;
   margin-top:20pt;
   background:#303030;
@@ -164,6 +315,19 @@ input, textarea, *[contenteditable=true] {
   height:35pt;
 }
 
+.card-status {
+  position:absolute;
+  display:flex;
+  top:0;
+  right:45%;
+  font-size:12pt;
+  line-height:15pt;
+  align-items:center;
+  z-index:10;
+  font-weight:700;
+  height:35pt;
+}
+
 .card-button {
   width:16pt;
   height:16pt;
@@ -194,15 +358,27 @@ input, textarea, *[contenteditable=true] {
 @media screen and (min-width: 1200px) {
   .card {
     display:inline-block;
-    width:calc(33% - 40pt);
+    width:calc(45% - 40pt);
   }
+}
+
+@media only screen and (max-device-width: 1000px) {
+    .card{
+        display:inline-block;
+        /* width:calc(66% - 40pt); */
+        width: 300px;
+    }
 }
 
 @media screen and (min-width: 1800px) {
   .card {
     display:inline-block;
-    width:calc(25% - 40pt);
+    width:calc(50% - 40pt);
   }
+}
+
+html, body {
+    height: 100%;
 }
 
 .packery-drop-placeholder {
@@ -312,10 +488,147 @@ input, textarea, *[contenteditable=true] {
 .mdl-layout__drawer {
   width: 300px;
   left: -150px;
+  z-index: 11;
+}
+
+.mdl-layout__drawer-button {
+    top: calc(100% - 90pt);
+    color: indigo !important;
+    background-color: transparent !important;
+}
+
+.mdl-layout__header-row {
+    height: calc(100% - 42pt);
 }
 
 .mdl-layout__drawer.is-visible {
   left: 0;
+}
+
+
+@media only screen and (max-device-width: 1000px) {
+    #mdl-header{
+        position:absolute;
+        height: 0%;
+        min-height: 0%;
+    }
+    .mdl-layout__tab-bar {
+        height: 100%;
+    }
+
+    .corner-icon {
+        font-size: medium; 
+    }
+
+    .corner-button {
+        width: 24px !important;
+        aspect-ratio: 1 !important;
+        height: auto;
+        min-width: initial;
+    }
+
+    #plus-button {
+        bottom: 44px;
+        left: 10px;
+    }
+
+    #menu-button {
+        bottom: 10px;
+        left: 44px;
+    }
+
+    #fullscreen-button {
+        bottom: 10px;
+        left: 10px;
+    }
+}
+
+@media only screen and (min-device-width: 1600px){
+    #mdl-header{
+        display: flex;
+        position:absolute;
+        height: 0%;
+        min-height: 0%;
+    }
+    .mdl-layout__tab-bar {
+        height: 100%;
+    }
+
+    .corner-icon {
+        font-size: x-large; 
+    }
+
+    .corner-button {
+        width: 56px !important;
+        aspect-ratio: 1 !important;
+        height: auto;
+        min-width: initial;
+    }
+
+    #plus-button {
+        bottom: 7%;
+        left: 1%;
+    }
+
+    #menu-button {
+        bottom: 2%;
+        left: 1%;
+    }
+
+    #fullscreen-button {
+        bottom: 2%;
+        left: 5%;
+    }
+}
+
+#plus-button {
+    position: fixed;
+    color: indigo !important;
+    background-color:linen  !important;
+    z-index: 11;
+}
+
+#menu-button {
+    position: absolute;
+    background: rgba(0,0,0,0.05);
+    border:  0;
+    border-radius: 50%;
+    box-sizing: border-box;
+    transition:  transform .3s;
+    cursor:  pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+    background-color: linen;
+}
+
+#fullscreen-button {
+    position: absolute;
+    background: rgba(0,0,0,0.05);
+    border:  0;
+    border-radius: 50%;
+    box-sizing: border-box;
+    transition:  transform .3s;
+    cursor:  pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+    /* top: calc(100% - 50pt); */
+    background-color: linen;
+}
+#fullscreen-button:hover {
+    transform: scale(1.125);
+}
+#fullscreen-button svg:nth-child(2) { 
+    display: none;
+}
+[fullscreen] #fullscreen-button svg:nth-child(1) {
+    display: none;
+}
+[fullscreen] #fullscreen-button svg:nth-child(2) {
+    display: inline-block;
 }
 
 .topics-nav-title {
@@ -375,6 +688,297 @@ input, textarea, *[contenteditable=true] {
   -webkit-animation: load6 1.7s infinite ease, round 1.7s infinite ease;
   animation: load6 1.7s infinite ease, round 1.7s infinite ease;
 }
+
+
+body, ::backdrop {
+    background: #fff;
+}
+
+.chat-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+input {
+    border: none;
+    background-color: rgba(255, 255, 255, .1);
+    border-color: rgba(32,33,35,.5);
+    width: 100%;
+    height: 50px;
+    font-size: 22px;
+    padding-left: 1rem;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, .05) 0px 54px 55px,
+    rgba(0, 0, 0, .05) 0px -12px 30px,
+    rgba(0, 0, 0, .05) 0px 4px 6px,
+    rgba(0, 0, 0, .05) 0px 12px 3px,
+    rgba(0, 0, 0, .09) 0px -3px 5px;
+    direction: rtl;
+    text-align: center;
+}
+
+input:focus {
+    outline: none;
+}
+
+.message {
+    color:#999;
+    padding: 1em 0;
+}
+
+.input-section {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+}
+
+.input-section #submit {
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    bottom: 15px;
+    transform: rotate(90deg);
+    font-size: x-large;
+}
+
+@media only screen and (max-device-width: 1000px) {
+    #result {
+        text-align: center;
+        margin-top: 4%;
+        line-height: 1;
+        font-size:x-small;
+        direction: rtl;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+@media only screen and (min-device-width: 1600px) {
+    #result {
+        text-align: center;
+        margin-top: 10%;
+        font-size: xx-large;
+        direction: rtl;
+    }
+}
+
+#result {
+    text-align: center;
+    margin-top: 10%;
+    font-size: xx-large;
+    direction: rtl;
+}
+
+#mic-icon {
+    margin-top: 2%;
+    color: black;
+    background-color: white;
+}
+
+#language-selector {
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+#switch-onoff {
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+#switch-avoidance {
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+#volume-bar {
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+#speed-bar {
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+#headlight-bar {
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+#s1 {
+    direction: ltr;
+}
+
+#s2 {
+    direction: ltr;
+}
+
+@media only screen and (max-device-width: 1000px){
+    .controller-title {
+        height: 10px;
+    }
+}
+
+@media only screen and (min-device-width: 1600px){
+    .controller-title {
+        height: 40px;
+    }
+}
+
+.status-icon {
+    margin-left: 20px;
+}
+
+.battery{
+    height: 15px;
+    width: 25px;
+    border: 2px solid #103854;
+    border-radius: 8px;
+  }
+  
+  .top{
+    height: 5px;
+    width: 2px;
+    background-color: #103854;
+    position: relative;
+    left: 28px;
+    top: 4px;
+    border-radius: 0 1px 1px 0;
+  }
+  
+  #charge,#charge2,#charge3,#charge4{
+    width:5px;
+    height:10px;
+    background-color: #15bd26;
+    position: relative;
+    opacity: 0;
+    border-radius: 2px 2px 2px 2px;
+  }
+  
+  #charge{
+    bottom: 2px;
+    left: 1px;
+    /* can be used for charging animation */
+    /* animation: charge-1 3s infinite; */
+  }
+  
+  @keyframes charge-1{
+    25%,100%{
+      opacity: 1;
+    }
+  }
+  
+  #charge2{
+    bottom: 12px;
+    left: 7px;
+    /* animation: charge-2 3s infinite; */
+  }
+  
+  @keyframes charge-2{
+    0%,25%{
+      opacity: 0;
+    }
+    50%,100%{
+      opacity: 1;
+    }
+  }
+  
+  #charge3{
+    bottom: 22px;
+    left: 13px;
+    /* animation: charge-3 3s infinite; */
+  }
+  
+  @keyframes charge-3{
+    0%,50%{
+      opacity: 0;
+    }
+    70%,100%{
+      opacity: 1;
+    }
+  }
+  
+  #charge4{
+    bottom: 32px;
+    left: 19px;
+    /* animation: charge-4 3s infinite; */
+  }
+  
+  @keyframes charge-4{
+    0%,70%{
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
+    }
+}
+
+div.signal {
+    /* margin-left: 80px; */
+    height: 15px;
+    width: 30px;
+}
+
+div.bar {
+    background-color: gray;
+    width: 12%;
+    display: inline-block;
+    opacity: 0.1;
+} 
+
+.gamepad-on-icon {
+    background: url('./images/gamepad-connected-20.png');
+    height: 20px;
+    width: 20px;
+    display: block;
+}
+
+.gamepad-off-icon {
+    background: url('./images/gamepad-disconnected-20.png');
+    height: 20px;
+    width: 20px;
+    display: block;
+}
+
+#command-content {
+    margin: 5%;
+    display: grid;
+	width: 1fr;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 1em;
+	padding-top: 20px;
+}
+
+@media only screen and (max-device-width: 1000px){
+    #command-content  button {
+        height: 100px;
+        padding: 10px;
+    	text-align: center;
+    	cursor: pointer;
+    	background-color: rgb(102, 22, 159);
+    	font-size: 1.2em;
+    	border-radius: 5px;
+    	box-shadow: 1px 1px 1px #333;
+    	transition: .2s;
+    }
+}
+
+@media only screen and (min-device-width: 1600px){
+    #command-content  button {
+        height: 300px;
+        padding: 10px;
+    	text-align: center;
+    	cursor: pointer;
+    	background-color: rgb(102, 22, 159);
+    	font-size: 2em;
+    	border-radius: 5px;
+    	transition: .2s;
+    }
+}
+
 @-webkit-keyframes load6 {
   0% {
     box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;

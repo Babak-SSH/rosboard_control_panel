@@ -16,11 +16,367 @@ importJsOnce("js/viewers/TimeSeriesPlotViewer.js");
 importJsOnce("js/viewers/PointCloud2Viewer.js");
 importJsOnce("js/viewers/ImuViewer.js");
 importJsOnce("js/viewers/JointStateViewer.js");
+// importJsOnce("js/viewers/JoystickController.js");
+importJsOnce("js/viewers/ControllerViewer.js");
+importJsOnce("js/viewers/MiniImageViewer.js");
 
 // GenericViewer must be last
 importJsOnce("js/viewers/GenericViewer.js");
 
 importJsOnce("js/transports/WebSocketV1Transport.js");
+importJsOnce("js/config.js");
+
+importJsOnce("js/Controller.js");
+
+
+// Dont deploy This APi KEY or upload on to github
+const API_KEY = MyApiKey;
+const API_URL = "https://api.openai.com/v1/chat/completions";
+
+const colorTopic = ColorTopic;
+const depthTopic = DepthTopic;
+
+const submitButton   = document.querySelector('#submit');
+const outPutElement  = document.querySelector('#result');
+const inputElement   = document.querySelector('#input-text');
+const buttonElement  = document.querySelector('#mic-icon');
+
+// supported Language List
+var langList = ['en', 'fa'];
+// Get browser Language
+var userLang = navigator.language || navigator.userLanguage;
+// extract Language (en-US => en)
+userLang = userLang.substring(0, 2);
+changeLang(userLang);
+
+function changeLang(lang) {
+    userLang = lang;
+    langList.forEach((langEle) => {
+    if (langEle == lang) {
+        var langElems = document.querySelectorAll('.' + langEle)
+        langElems.forEach((elem) => {
+            elem.style.display = "block"
+        })
+    }
+    else {
+        hideLang(langEle)
+    }
+  })
+}
+
+function hideLang(lang) {
+    var langElems = document.querySelectorAll('.' + lang)
+    langElems.forEach((elem) => {
+        elem.style.display = "none"
+    })
+}
+
+function changeInput(value) {
+    const inputElement = document.querySelector('input');
+    inputElement.value = value;
+}
+
+let synth = speechSynthesis,
+  isSpeaking = true;
+
+voices();
+
+function voices() {
+  for (let voice of synth.getVoices()) {
+    let selected = voice.name === "Google US English" ? "selected" : "";
+    let option = `<option value="${voice.name}" ${selected}>${voice.name} (${voice.lang})</option>`;
+    voiceList.insertAdjacentHTML("beforeend", option);
+  }
+}
+
+
+async function getMessage() {
+    var lang;
+    if (userLang == "en") {
+        lang = "english";
+    } else if (userLang == "fa") {
+        lang = "persian";
+    }
+    const options = {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${API_KEY}`,
+            'Content-Type' : 'application/json'
+        }, 
+        body : JSON.stringify({
+            model : "gpt-3.5-turbo",
+            messages: [
+            	{role: "system", content: ChatgptRole + " you will respond in " + lang + " language."},
+            	
+            	{role: "assistant", content: ChatgptContent + " you will respond in " + lang + " language."},
+            	{role: "user", content: inputElement.value},],
+            max_tokens: 400
+        })
+    }
+    try {
+        const response = await fetch(API_URL, options);
+        const data = await response.clone().json();
+        outPutElement.textContent = data.choices[0].message.content;
+    if ('speechSynthesis' in window) {
+    }else{
+      alert("Sorry, your browser doesn't support text to speech!");
+    }
+    console.log("speaking");
+    // var response = new SpeechSynthesisUtterance();
+    // response.text = text;
+    // response.lang = 'fa'
+    // window.speechSynthesis.speak(response);
+
+  // Create a new SpeechSynthesisUtterance object
+  let utterance = new SpeechSynthesisUtterance();
+
+//   utterance.lang = 'fa';
+// utterance.voice = 'fa';
+  // Set the text and voice of the utterance
+  utterance.text = data.choices[0].message.content;
+  console.log(data.choices[0].message.content);
+  for (let voice of synth.getVoices()) {
+    // console.log(voice.name);
+    if (voice.name === "Persian") {
+        console.log(voice.name);
+      utterance.voice = voice;
+    }
+  }
+//   setTimeout(() => {
+//     console.log(window.speechSynthesis.getVoices());
+// }, 50);
+    // const voices = utterance.getVoices();
+    // console.log(voices);
+// utterance.text = "hello there";
+//   utterance.voice = window.speechSynthesis.getVoices()[0];
+
+  // Speak the utterance
+  synth.speak(utterance);
+ 
+            if (data.choices[0].message.content && inputElement.value) {
+                const pElement = document.createElement('p');
+                pElement.textContent = inputElement.value;
+                pElement.addEventListener('click', () => changeInput());
+            }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+submitButton.addEventListener('click', getMessage);
+
+function clearInput() {
+    inputElement.value = '';
+}
+
+buttonElement.addEventListener('click', clearInput);
+
+const GetDrawer = () => {
+    var drawer = document.querySelector('.mdl-layout');
+    drawer.MaterialLayout.toggleDrawer();
+}
+
+const ToggleTabMenu = () => {
+    var header = document.getElementById("mdl-header");
+    if (header.style.display == "flex") {
+        header.style.display = "none";
+    } else {
+        header.style.display = "flex";
+    }
+}
+
+const GetSpeech = () => {
+    console.log("clicked microphone");
+    // To enable the SpeechRecognition in Firefox Nightly > 72, go to about:config and switch 
+    // the flags media.webspeech.recognition.enable and media.webspeech.recognition.force_enable to true.
+    const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
+   
+    let recognition = new SpeechRecognition();
+    recognition.lang = 'fa-IR'
+
+        var intxt = document.getElementById("input-text");
+        recognition.onstart = () => {
+            console.log("starting listening, speak in microphone");
+        }
+        recognition.onspeechend = () => {
+            console.log("stopped listening");
+            recognition.stop();
+        }
+        recognition.onresult = (result) => {
+            console.log(result.results[0][0].transcript);
+            intxt.value += result.results[0][0].transcript;
+         }
+     
+         recognition.start();
+}
+
+function mobileCheck() {
+    let check = false;
+    (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
+    return check;
+};
+
+function sleep (time) {
+    // time in milliseconds
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+function vbClick(butt) {
+    if (butt == 1) {
+        currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX:0, joystickLY:0,
+                                      joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                      joystickButtonA:true, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
+                                      joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                      joystickRSB:false, joystickLSB:false, joystickEdit:false});
+    } else if (butt == 2) {
+        currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX:0, joystickLY:0,
+                                      joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                      joystickButtonA:false, joystickButtonX:false, joystickButtonB:true, joystickButtonY:false, 
+                                      joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                      joystickRSB:false, joystickLSB:false, joystickEdit:false});
+    } else if (butt == 3) {
+        currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX:0, joystickLY:0,
+                                      joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                      joystickButtonA:false, joystickButtonX:true, joystickButtonB:false, joystickButtonY:false, 
+                                      joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                      joystickRSB:false, joystickLSB:false, joystickEdit:false});
+    }
+    sleep(50).then(() => {
+        currentTransport.update_joy({joystickRX:0, joystickRY:0, joystickLX:0, joystickLY:0,
+                                      joystickDUp:false, joystickDDown:false, joystickDRight:false, joystickDLeft:false,
+                                      joystickButtonA:false, joystickButtonX:false, joystickButtonB:false, joystickButtonY:false, 
+                                      joystickButtonR1:false, joystickButtonR2:false, joystickButtonL1:false, joystickButtonL2:false,
+                                      joystickRSB:false, joystickLSB:false, joystickEdit:false});
+    });     
+}
+
+function toggleGamepadStatus() {
+    var gt = document.getElementById("gamepad-toggle");
+    if (gt.className == "gamepad-on-icon") {
+        gt.className = "gamepad-off-icon";
+    } else {
+        gt.className = "gamepad-on-icon";
+    }
+};
+
+function changeGamepad() {
+    var virtualJoystickR = document.getElementById("joyRight");
+    var virtualJoystickL = document.getElementById("joyLeft");
+    var virtualButtonA = document.getElementById("Abutton");
+    var virtualButtonB = document.getElementById("Bbutton");
+    var virtualButtonX = document.getElementById("Xbutton");
+    if (virtualJoystickR.style.display == "none") {
+        virtualJoystickR.style.display = "block";
+        virtualJoystickL.style.display = "block";
+        virtualButtonA.style.display = "block";
+        virtualButtonB.style.display = "block";
+        virtualButtonX.style.display = "block";
+    } else {
+        virtualJoystickR.style.display = "none";
+        virtualJoystickL.style.display = "none";
+        virtualButtonA.style.display = "none";
+        virtualButtonB.style.display = "none";
+        virtualButtonX.style.display = "none";
+    }
+}
+
+if (document.fullscreenEnabled) {
+    const fullscreen_button = document.createElement("button");
+    fullscreen_button.classList.add("corner-button")
+    fullscreen_button.setAttribute('id','fullscreen-button');
+    fullscreen_button.addEventListener("click", toggle_fullscreen);
+    fullscreen_button.innerHTML  = `
+        <svg viewBox="0 0 24 24">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 
+            7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+        </svg>
+        <svg viewBox="0 0 24 24">
+            <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 
+            11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+        </svg>
+    `;
+    document.body.appendChild(fullscreen_button);
+}
+
+function toggle_fullscreen() {
+    let elem = document.body;
+    // let controller = document.getElementById("controller-img")
+    if (!document.fullscreenElement) {
+        // controller.style = "controller-img-windowed";
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+          elem.msRequestFullscreen();
+        }
+        document.body.setAttribute("fullscreen",""); 
+    } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+          document.msExitFullscreen();
+        }
+        document.body.removeAttribute("fullscreen"); 
+    }
+} 
+
+let controller_tab = document.getElementById("tab2");
+controller_tab.addEventListener("click", get_controller, {once: true});
+function get_controller() {
+    initMiniImage({topicName: depthTopic, topicType: "sensor_msgs/Image"});
+    initController({topicName: colorTopic, topicType: "sensor_msgs/Image"});
+    document.body.style.overflow='hidden';
+}
+
+function changeSource() {
+    let m = subscriptions[colorTopic].viewer;
+    let s = subscriptions[depthTopic].viewer;
+
+    subscriptions[colorTopic].viewer = s;
+    subscriptions[depthTopic].viewer = m;
+    // currentTransport.unsubscribe({topicName:colorTopic});
+}
+
+function setBattery(charge) {
+    let cell1 = document.getElementById("charge");
+    let cell2 = document.getElementById("charge2");
+    let cell3 = document.getElementById("charge3");
+    let cell4 = document.getElementById("charge4");
+    if (charge > 0) {
+        cell1.style.opacity = 1;
+        if (charge > 25) {
+            cell2.style.opacity = 1;
+            if (charge > 50) {
+                cell3.style.opacity = 1;
+                if (charge > 75) {
+                    cell4.style.opacity = 1;
+                }
+            }
+        }
+    }
+}
+
+function setSignal(power) {
+    let cell1 = document.getElementById("sbar1");
+    let cell2 = document.getElementById("sbar2");
+    let cell3 = document.getElementById("sbar3");
+    let cell4 = document.getElementById("sbar4");
+    if (power > 0) {
+        cell1.style.opacity = 1;
+        if (power > 25) {
+            cell2.style.opacity = 1;
+            if (power > 50) {
+                cell3.style.opacity = 1;
+                if (power > 75) {
+                    cell4.style.opacity = 1;
+                }
+            }
+        }
+    }
+}
 
 var snackbarContainer = document.querySelector('#demo-toast-example');
 
@@ -43,13 +399,27 @@ if(window.localStorage && window.localStorage.subscriptions) {
 
 let $grid = null;
 $(() => {
-  $grid = $('.grid').masonry({
+  $grid = $('.status-grid').masonry({
     itemSelector: '.card',
     gutter: 10,
     percentPosition: true,
   });
   $grid.masonry("layout");
 });
+
+let $controller_grid = null;
+$(() => {
+    $controller_grid = $('.controller-grid').masonry({
+        itemSelector: '.controller-card',
+        // gutter: 10,
+        // percentPosition: true,
+    });
+});
+
+setInterval(() => {
+    $grid.masonry("reloadItems");
+    $grid.masonry();
+  }, 500);
 
 setInterval(() => {
   if(currentTransport && !currentTransport.isConnected()) {
@@ -73,8 +443,22 @@ function updateStoredSubscriptions() {
 function newCard() {
   // creates a new card, adds it to the grid, and returns it.
   let card = $("<div></div>").addClass('card')
-    .appendTo($('.grid'));
+    .appendTo($('.status-grid'));
   return card;
+}
+
+function newController() {
+    // creates controller, adds it to the grid, and returns it.
+    let card= $("<div></div>").addClass('controller-card')
+        .appendTo($('#controller-content'));
+    return card;
+}
+
+function newMiniImage() {
+    // creates mini image, adds it to the grid, and returns it.
+    let card= $("<div></div>").addClass('mini-image-card')
+        .appendTo($('#controller-content'));
+    return card;
 }
 
 let onOpen = function() {
@@ -93,6 +477,9 @@ let onOpen = function() {
   }          
   
   for(let topic_name in subscriptions) {
+    if (topic_name == colorTopic || topic_name == depthTopic) {
+        continue;
+    }
     console.log("Re-subscribing to " + topic_name);
     initSubscribe({topicName: topic_name, topicType: subscriptions[topic_name].topicType});
   }
@@ -103,7 +490,7 @@ let onOpen = function() {
 let onSystem = function(system) {
   if(system.hostname) {
     console.log("hostname: " + system.hostname);
-    $('.mdl-layout-title').text("ROSboard: " + system.hostname);
+    $('.mdl-layout-title').text("Control Panel: " + system.hostname);
   }
 
   if(system.version) {
@@ -204,6 +591,48 @@ function addTopicTreeToNav(topicTree, el, level = 0, path = "") {
   });
 }
 
+function initMiniImage({topicName, topicType}) {
+    if(!subscriptions[topicName]) {
+      subscriptions[topicName] = {
+        topicType: topicType,
+      }
+    }  
+    currentTransport.subscribe({topicName: topicName});
+    if(!subscriptions[topicName].viewer) {
+        let card = newMiniImage(); 
+
+        let viewer = Viewer.getDefaultViewerForType(topicName, topicType);
+        try {
+          subscriptions[topicName].viewer = new viewer(card, topicName, topicType);
+        } catch(e) {
+          console.log(e);
+          card.remove();
+        }
+    }
+    updateStoredSubscriptions();
+}
+
+function initController({topicName, topicType}) {
+    if(!subscriptions[topicName]) {
+      subscriptions[topicName] = {
+        topicType: topicType,
+      }
+    }  
+    currentTransport.subscribe({topicName: topicName});
+    if(!subscriptions[topicName].viewer) {
+        let card = newController(); 
+
+        let viewer = Viewer.getDefaultViewerForType(topicName, topicType);
+        try {
+          subscriptions[topicName].viewer = new viewer(card, topicName, topicType);
+        } catch(e) {
+          console.log(e);
+          card.remove();
+        }
+    }
+    updateStoredSubscriptions();
+}
+
 function initSubscribe({topicName, topicType}) {
   console.log( "Subscribing to " + topicName + " of type " + topicType);
   // creates a subscriber for topicName
@@ -217,16 +646,28 @@ function initSubscribe({topicName, topicType}) {
   }  
   currentTransport.subscribe({topicName: topicName});
   if(!subscriptions[topicName].viewer) {
-    let card = newCard();
-    let viewer = Viewer.getDefaultViewerForType(topicType);
+    let card;
+    if (topicName == colorTopic) {
+    //    card = newController(); 
+    } else if(topicName == depthTopic) {
+        // card = newMiniImage();
+    } else {
+        card = newCard();
+    }
+
+    let viewer = Viewer.getDefaultViewerForType(topicName, topicType);
     try {
       subscriptions[topicName].viewer = new viewer(card, topicName, topicType);
     } catch(e) {
       console.log(e);
       card.remove();
     }
-    $grid.masonry("appended", card);
-    $grid.masonry("layout");
+    if (topicName == colorTopic || topicName == depthTopic){
+        // $controller_grid.masonry("appended", card);
+    } else {
+        $grid.masonry("appended", card);
+        $grid.masonry("layout");
+    }
   }
   updateStoredSubscriptions();
 }

@@ -18,6 +18,8 @@ else:
     print("ROS not detected. Please source your ROS environment\n(e.g. 'source /opt/ros/DISTRO/setup.bash')")
     exit(1)
 
+from geometry_msgs.msg import Twist
+from sensor_msgs.msg import Joy
 from rosgraph_msgs.msg import Log
 
 from rosboard.serialization import ros2dict
@@ -60,6 +62,8 @@ class ROSBoardNode(object):
             # ros2 docs don't explain why but we need this magic.
             self.sub_rosout = rospy.Subscriber("/rosout", Log, lambda x:x)
 
+        self.joy_pub = rospy.Publisher('/joy', Joy, queue_size=100)
+
         tornado_settings = {
             'debug': True,
             'static_path': os.path.join(os.path.dirname(os.path.realpath(__file__)), 'html')
@@ -93,6 +97,9 @@ class ROSBoardNode(object):
 
         # loop to keep track of latencies and clock differences for each socket
         threading.Thread(target = self.pingpong_loop, daemon = True).start()
+
+        # loop to send client joy message to ros topic
+        threading.Thread(target = self.joy_loop, daemon = True).start()
 
         self.lock = threading.Lock()
 
@@ -154,6 +161,43 @@ class ROSBoardNode(object):
             else:
                 rospy.logwarn("QoS profiles are only used in ROS2")
                 return None
+
+    def joy_loop(self):
+        """
+        Sending joy message from client
+        """
+
+        joy = Joy()
+        while True:
+            time.sleep(0.1)
+            if not isinstance(ROSBoardSocketHandler.joy_msg, dict):
+                continue
+            joy.buttons = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            joy.axes = [0,0,0,0,0,0,0,0]
+
+            joy.buttons[0] = ROSBoardSocketHandler.joy_msg["A"]
+            joy.buttons[2] = ROSBoardSocketHandler.joy_msg["X"]
+            joy.buttons[1] = ROSBoardSocketHandler.joy_msg["B"]
+            joy.buttons[3] = ROSBoardSocketHandler.joy_msg["Y"]
+            joy.buttons[5] = ROSBoardSocketHandler.joy_msg["R1"]
+            joy.buttons[6] = ROSBoardSocketHandler.joy_msg["R2"]
+            joy.buttons[7] = ROSBoardSocketHandler.joy_msg["L1"]
+            joy.buttons[8] = ROSBoardSocketHandler.joy_msg["L2"]
+            joy.buttons[9] = ROSBoardSocketHandler.joy_msg["RSB"]
+            joy.buttons[10] = ROSBoardSocketHandler.joy_msg["LSB"]
+            joy.buttons[11] = ROSBoardSocketHandler.joy_msg["Edit"]
+            joy.buttons[12] = ROSBoardSocketHandler.joy_msg["DUp"]
+            joy.buttons[13] = ROSBoardSocketHandler.joy_msg["DDown"]
+            joy.buttons[14] = ROSBoardSocketHandler.joy_msg["DRght"]
+            joy.buttons[15] = ROSBoardSocketHandler.joy_msg["DLeft"]
+
+
+            joy.axes[3] = -float(ROSBoardSocketHandler.joy_msg["rx"])
+            joy.axes[4] = -float(ROSBoardSocketHandler.joy_msg["ry"])
+            joy.axes[0] = -float(ROSBoardSocketHandler.joy_msg["lx"])
+            joy.axes[1] = -float(ROSBoardSocketHandler.joy_msg["ly"])
+
+            self.joy_pub.publish(joy)
 
     def pingpong_loop(self):
         """

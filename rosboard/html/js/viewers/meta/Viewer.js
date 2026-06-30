@@ -20,7 +20,6 @@ class Viewer {
 
     this.onClose = () => {};
     let that = this;
-
     // div container at the top right for all the buttons
     card.buttons = $('<div></div>').addClass('card-buttons').text('').appendTo(card);
 
@@ -228,7 +227,7 @@ Viewer.registerViewer = (viewer) => {
 };
 
 // not to be overwritten by child class!
-Viewer.getDefaultViewerForType = (type) => {
+Viewer.getDefaultViewerForType = (name, type) => {
   // gets the viewer class for a given message type (e.g. "std_msgs/msg/String")
 
   // if type is "package/MessageType", converted it to "package/msgs/MessageType"
@@ -240,6 +239,21 @@ Viewer.getDefaultViewerForType = (type) => {
   // go down the list of registered viewers and return the first match
   for(let i in Viewer._viewers) {
     if(Viewer._viewers[i].supportedTypes.includes(type)) {
+        if (name == colorTopic) {
+            if (Viewer._viewers[i].name == "ControllerViewer") {
+                return Viewer._viewers[i];
+            }
+            else {
+                continue;
+            }
+        } else if (name == depthTopic) {
+            if (Viewer._viewers[i].name == "MiniImageViewer") {
+                return Viewer._viewers[i];
+            }
+            else {
+                continue;
+            }
+        }
       return Viewer._viewers[i];
     }
     if(Viewer._viewers[i].supportedTypes.includes("*")) {

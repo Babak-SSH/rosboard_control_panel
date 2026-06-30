@@ -64,6 +64,34 @@ class WebSocketV1Transport {
     unsubscribe({topicName}) {
       this.ws.send(JSON.stringify([WebSocketV1Transport.MSG_UNSUB, {topicName: topicName}]));
     }
+
+    update_joy({joystickRX, joystickRY, joystickLX, joystickLY,
+        joystickDUp, joystickDDown, joystickDRight, joystickDLeft,
+        joystickButtonA, joystickButtonX, joystickButtonB, joystickButtonY, 
+        joystickButtonR1, joystickButtonR2, joystickButtonL1, joystickButtonL2,
+        joystickRSB, joystickLSB, joystickEdit}) {
+        this.ws.send(JSON.stringify([WebSocketV1Transport.JOY_MSG, {
+        ["A"]: joystickButtonA,
+        ["X"]: joystickButtonX,
+        ["B"]: joystickButtonB,
+        ["Y"]: joystickButtonY,
+        ["R1"]: joystickButtonR1,
+        ["R2"]: joystickButtonR2,
+        ["L1"]: joystickButtonL1,
+        ["L2"]: joystickButtonL2,
+        ["RSB"]: joystickRSB,
+        ["LSB"]: joystickLSB,
+        ["Edit"]: joystickEdit,
+        ["DUp"]: joystickDUp,
+        ["DDown"]: joystickDDown,
+        ["DRght"]: joystickDRight,
+        ["DLeft"]: joystickDLeft,
+        ["rx"]: joystickRX.toFixed(3),
+        ["ry"]: joystickRY.toFixed(3),
+        ["lx"]: joystickLX.toFixed(3),
+        ["ly"]: joystickLY.toFixed(3),
+    }]));
+    }
   }
   
   WebSocketV1Transport.MSG_PING = "p";
@@ -77,3 +105,5 @@ class WebSocketV1Transport {
   WebSocketV1Transport.PING_SEQ= "s";
   WebSocketV1Transport.PONG_SEQ = "s";
   WebSocketV1Transport.PONG_TIME = "t";
+
+  WebSocketV1Transport.JOY_MSG = "j";
