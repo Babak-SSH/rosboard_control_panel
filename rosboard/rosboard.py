@@ -3,6 +3,7 @@
 import asyncio
 import importlib
 import os
+import socket
 import threading
 import time
 import tornado, tornado.web, tornado.websocket
@@ -12,7 +13,7 @@ if os.environ.get("ROS_VERSION") == "1":
     import rospy # ROS1
 elif os.environ.get("ROS_VERSION") == "2":
     import rosboard.rospy2 as rospy # ROS2
-    from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSDurabilityPolicy
+    from rclpy.qos import HistoryPolicy, QoSProfile, QoSReliabilityPolicy, QoSDurabilityPolicy
 else:
     print("ROS not detected. Please source your ROS environment\n(e.g. 'source /opt/ros/DISTRO/setup.bash')")
     exit(1)
@@ -34,6 +35,7 @@ class ROSBoardNode(object):
         self.__class__.instance = self
         rospy.init_node(node_name)
         self.port = rospy.get_param("~port", 8888)
+        self.title = rospy.get_param("~title", socket.gethostname())
 
         # desired subscriptions of all the websockets connecting to this instance.
         # these remote subs are updated directly by "friend" class ROSBoardSocketHandler.
@@ -104,7 +106,10 @@ class ROSBoardNode(object):
         rospy.loginfo("ROSboard listening on :%d" % self.port)
 
     def start(self):
-        rospy.spin()
+        try:
+            rospy.spin()
+        except KeyboardInterrupt:
+            pass
 
     def get_msg_class(self, msg_type):
         """
@@ -141,6 +146,8 @@ class ROSBoardNode(object):
             if rospy.__name__ == "rospy2":
                 topic_info = rospy._node.get_publishers_info_by_topic(topic_name=topic_name)
                 if len(topic_info):
+                    if topic_info[0].qos_profile.history == HistoryPolicy.UNKNOWN:
+                        topic_info[0].qos_profile.history = HistoryPolicy.KEEP_LAST
                     return topic_info[0].qos_profile
                 else:
                     rospy.logwarn(f"No publishers available for topic {topic_name}. Returning sensor data QoS")
